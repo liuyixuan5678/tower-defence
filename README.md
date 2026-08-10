@@ -10,7 +10,7 @@ A browser-based tower defense game with a cyberpunk/sci-fi aesthetic. No install
 4. Click **LAUNCH WAVE** to send enemies — survive all waves to win.
 5. Earn credits from kills and wave clears to buy and upgrade towers.
 
-**You lose if 20 enemies reach the exit.**
+**You lose if the amount of lives you have hits zero.**
 
 ## Controls
 
@@ -61,9 +61,9 @@ Enemies follow two branching paths (upper and lower) that share entry and exit c
 
 ## Tips
 
-- Place Spikes and Mud traps on the path first for cheap early control.
 - Laser Rods are powerful but require two aligned rods to activate.
 - Missile Launchers are expensive but devastate large clusters of enemies.
+- Level 5 of Plasma Turret does lots of damage and reloads quickly.
 - Boomerang towers are cost-efficient — each projectile hits enemies twice.
 - Save credits before boss waves (wave 10, 20, 30, …) for emergency purchases.
 

@@ -41,7 +41,7 @@ A browser-based tower defense game with a cyberpunk/sci-fi aesthetic. No install
 | Boomerang | 100cr | Projectile flies out and returns, piercing all enemies twice |
 | Nuke | 500cr | One-time board-wide clear (5000 damage) |
 | Missile Launcher | 1000cr | Homing missiles with massive AOE (10000 damage, 20-cell range) |
-| Super Cannon | 2000cr | Fires explosive shells across the entire board |
+| Super Turret | 2000cr | Fires bullets across the entire board |
 
 All towers can be upgraded up to **level 5** by clicking on a placed tower. Right-click to delete and receive a partial refund.
 

@@ -69,7 +69,7 @@ Enemies follow two branching paths (upper and lower) that share entry and exit c
 
 ## Technical Details
 
-- Single-file game: all logic, CSS, and Canvas rendering in `index.html` (~3200 lines).
+- Single-file game: all logic, CSS, and Canvas rendering in `index.html` (~4000 lines).
 - No external dependencies, no build step.
 - Vanilla JavaScript (ES6+) with `requestAnimationFrame` game loop.
 - Fixed-timestep accumulator for consistent speed across different display refresh rates.

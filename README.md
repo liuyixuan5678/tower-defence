@@ -5,10 +5,11 @@ A browser-based tower defense game with a cyberpunk/sci-fi aesthetic. No install
 ## How to Play
 
 1. Open `index.html` in any modern browser (Chrome, Firefox, Safari, Edge).
-2. Select a tower from the shop panel on the right.
+2. Select a tower from the **SHOP** panel on the right.
 3. Place towers on the grid (not on the enemy path).
 4. Click **LAUNCH WAVE** to send enemies — survive all waves to win.
 5. Earn credits from kills and wave clears to buy and upgrade towers.
+6. Use the **DISASTER** panel for powerful one-time abilities during tough waves.
 
 **You lose if the amount of lives you have hits zero.**
 
@@ -45,6 +46,22 @@ A browser-based tower defense game with a cyberpunk/sci-fi aesthetic. No install
 
 All towers can be upgraded up to **level 5** by clicking on a placed tower. Right-click to delete and receive a partial refund.
 
+## Disasters
+
+Accessed via the **DISASTER** panel. Instant disasters (Lightning, Tsunami, Earthquake, Blizzard, Hailstorm) arm on click and fire each time you click the board — you can rapid-fire them. Placement disasters (Volcano, Tornado, Meteor, Black Hole) prompt you to click a location on the board.
+
+| Name | Cost | Description |
+|------|------|-------------|
+| Lightning | 150cr | Strikes 3 random enemies for 8000 dmg (3000 to bosses) |
+| Tsunami | 200cr | Wave sweeps the entire board, stunning and damaging all enemies |
+| Earthquake | 200cr | Stuns all enemies and cracks the ground |
+| Volcanic Eruption | 1000cr | Place a lava pool that deals continuous damage for 60s |
+| Tornado | 500cr | Place a tornado that slows and damages enemies for 60s |
+| Meteor | 250cr | Aim a column — a meteor falls and hits up to 5 enemies for 8000 dmg each |
+| Blizzard | 250cr | Freezes all enemies in place for 3 seconds |
+| Black Hole | 700cr | Place a gravitational well — slows enemies to 8% speed and deals 1000 dmg/0.5s for 30s |
+| Hailstorm | 300cr | 8 seconds of random hail pellets raining across the board, 1500 dmg per hit |
+
 ## Enemies
 
 - **Regular enemies**: HP scales with wave number and tier. Speed 1.2. Reward 10–50cr.
@@ -69,7 +86,7 @@ Enemies follow two branching paths (upper and lower) that share entry and exit c
 
 ## Technical Details
 
-- Single-file game: all logic, CSS, and Canvas rendering in `index.html` (~4000 lines).
+- Single-file game: all logic, CSS, and Canvas rendering in `index.html` (~5000 lines).
 - No external dependencies, no build step.
 - Vanilla JavaScript (ES6+) with `requestAnimationFrame` game loop.
 - Fixed-timestep accumulator for consistent speed across different display refresh rates.

@@ -10,7 +10,7 @@ A browser-based tower defense game with a cyberpunk/sci-fi aesthetic. No install
 4. Click **LAUNCH WAVE** to send enemies — survive all waves to win.
 5. Earn credits from kills and wave clears to buy and upgrade towers.
 
-**You lose if 20 enemies reach the exit.**
+**You lose if the amount of lives you have hits zero.**
 
 ## Controls
 
@@ -41,7 +41,7 @@ A browser-based tower defense game with a cyberpunk/sci-fi aesthetic. No install
 | Boomerang | 100cr | Projectile flies out and returns, piercing all enemies twice |
 | Nuke | 500cr | One-time board-wide clear (5000 damage) |
 | Missile Launcher | 1000cr | Homing missiles with massive AOE (10000 damage, 20-cell range) |
-| Super Cannon | 2000cr | Fires explosive shells across the entire board |
+| Super Turret | 2000cr | Fires bullets across the entire board |
 
 All towers can be upgraded up to **level 5** by clicking on a placed tower. Right-click to delete and receive a partial refund.
 
@@ -61,15 +61,15 @@ Enemies follow two branching paths (upper and lower) that share entry and exit c
 
 ## Tips
 
-- Place Spikes and Mud traps on the path first for cheap early control.
 - Laser Rods are powerful but require two aligned rods to activate.
 - Missile Launchers are expensive but devastate large clusters of enemies.
+- Level 5 of Plasma Turret does lots of damage and reloads quickly.
 - Boomerang towers are cost-efficient — each projectile hits enemies twice.
 - Save credits before boss waves (wave 10, 20, 30, …) for emergency purchases.
 
 ## Technical Details
 
-- Single-file game: all logic, CSS, and Canvas rendering in `index.html` (~3200 lines).
+- Single-file game: all logic, CSS, and Canvas rendering in `index.html` (~4000 lines).
 - No external dependencies, no build step.
 - Vanilla JavaScript (ES6+) with `requestAnimationFrame` game loop.
 - Fixed-timestep accumulator for consistent speed across different display refresh rates.

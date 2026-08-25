@@ -210,6 +210,130 @@
     box-shadow: 0 0 8px #ffaa00, 0 0 20px #ffaa0044;
   }
 
+  #disaster-btn {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 8px 20px;
+    background: transparent;
+    color: #bb44ff;
+    border: 1px solid #bb44ff;
+    cursor: pointer;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  #disaster-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #bb44ff;
+    transform: translateX(-100%);
+    transition: transform 0.2s;
+    opacity: 0.15;
+  }
+  #disaster-btn:hover::before { transform: translateX(0); }
+  #disaster-btn:hover { box-shadow: 0 0 8px #bb44ff, 0 0 20px #bb44ff44; }
+  #disaster-btn.active {
+    background: rgba(187,68,255,0.15);
+    box-shadow: 0 0 8px #bb44ff, 0 0 20px #bb44ff44;
+  }
+
+  #disaster-panel {
+    position: fixed;
+    top: 0;
+    right: -260px;
+    width: 240px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 60px 12px 12px;
+    background: var(--panel);
+    border-left: 1px solid var(--border);
+    z-index: 50;
+    transition: right 0.25s ease;
+    overflow-y: auto;
+  }
+  #disaster-panel.open { right: 0; }
+
+  .disaster-btn {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 10px 16px;
+    background: transparent;
+    color: #6a3a8a;
+    border: 1px solid #2d0d45;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+  }
+  .disaster-btn .btn-label {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .disaster-btn .tool-cost {
+    font-size: 9px;
+    opacity: 0.7;
+    letter-spacing: 1px;
+  }
+  .disaster-btn canvas.btn-icon {
+    flex-shrink: 0;
+    display: block;
+  }
+  .disaster-btn:hover {
+    color: #bb44ff;
+    border-color: #bb44ff;
+    box-shadow: 0 0 8px #bb44ff44;
+  }
+  .disaster-btn.active {
+    color: #dd88ff;
+    border-color: #dd88ff;
+    background: rgba(187,68,255,0.15);
+    box-shadow: 0 0 8px #bb44ff, 0 0 20px #bb44ff44;
+  }
+  .disaster-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  #save-btn, #load-btn {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 8px 16px;
+    background: transparent;
+    color: #88aacc;
+    border: 1px solid #336688;
+    cursor: pointer;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  #save-btn::before, #load-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #88aacc;
+    transform: translateX(-100%);
+    transition: transform 0.2s;
+    opacity: 0.12;
+  }
+  #save-btn:hover::before, #load-btn:hover::before { transform: translateX(0); }
+  #save-btn:hover, #load-btn:hover { box-shadow: 0 0 8px #88aacc, 0 0 20px #88aacc44; color: #aaccee; border-color: #88aacc; }
+
   #delete-btn {
     font-family: 'Orbitron', monospace;
     font-size: 11px;
@@ -524,8 +648,24 @@
   </div>
   <button id="start-btn">LAUNCH WAVE</button>
   <button id="auto-btn">AUTO</button>
+  <button id="disaster-btn">DISASTER</button>
   <button id="shop-btn">SHOP</button>
+  <button id="save-btn">SAVE</button>
+  <button id="load-btn">LOAD</button>
+  <input type="file" id="load-file-input" accept=".json" style="display:none">
   <button id="delete-btn">DELETE</button>
+</div>
+
+<div id="disaster-panel">
+  <button class="disaster-btn" id="disaster-lightning"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>LIGHTNING</span><span class="tool-cost">150cr · strikes 3 enemies</span></span></button>
+  <button class="disaster-btn" id="disaster-tsunami"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>TSUNAMI</span><span class="tool-cost">200cr · wave sweeps board</span></span></button>
+  <button class="disaster-btn" id="disaster-earthquake"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>EARTHQUAKE</span><span class="tool-cost">200cr · stuns all enemies</span></span></button>
+  <button class="disaster-btn" id="disaster-volcano"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>VOLCANIC ERUPTION</span><span class="tool-cost">1000cr · place lava pool 60s</span></span></button>
+  <button class="disaster-btn" id="disaster-tornado"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>TORNADO</span><span class="tool-cost">500cr · place tornado 60s</span></span></button>
+  <button class="disaster-btn" id="disaster-meteor"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>METEOR</span><span class="tool-cost">250cr · aim column, hits 5</span></span></button>
+  <button class="disaster-btn" id="disaster-blizzard"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>BLIZZARD</span><span class="tool-cost">250cr · freezes all enemies 3s</span></span></button>
+  <button class="disaster-btn" id="disaster-blackhole"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>BLACK HOLE</span><span class="tool-cost">700cr · place gravitational pull 10s</span></span></button>
+  <button class="disaster-btn" id="disaster-hailstorm"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>HAILSTORM</span><span class="tool-cost">300cr · 8s of falling hail</span></span></button>
 </div>
 
 <div id="toolbar">
@@ -594,6 +734,7 @@ function selectTool(tool) {
 
 toolBtns.forEach(b => b.addEventListener('click', () => {
   setDeleteMode(false);
+  clearDisaster();
   selectTool(b.dataset.tool);
 }));
 const overlay = document.getElementById('overlay');
@@ -764,7 +905,7 @@ function buildGridCache() {
 
 function initGame() {
   lives = 20;
-  credits = 150;
+  credits = 100000;
   currentWave = 1;
   waveActive = false;
   gameOver = false;
@@ -1906,8 +2047,6 @@ function detonateBomb(wx, wy) {
       color: Math.random() > 0.4 ? '#ffdd00' : Math.random() > 0.5 ? '#ff6a00' : '#ffffff'
     });
   }
-  // Switch back to turret after use
-  selectTool('turret');
 }
 
 function detonateNuke() {
@@ -1933,7 +2072,6 @@ function detonateNuke() {
       color: t < 0.3 ? '#ffffff' : t < 0.6 ? '#ffdd00' : t < 0.8 ? '#ff6a00' : '#ff2244'
     });
   }
-  selectTool('turret');
 }
 
 function spawnFlame(x, y, tx, ty) {
@@ -3073,6 +3211,40 @@ canvas.addEventListener('click', e => {
   const gx = Math.floor(wx / CELL);
   const gy = Math.floor(wy / CELL);
   if (gx < 0 || gx >= COLS || gy < 0 || gy >= ROWS) return;
+  // Volcano placement mode
+  if (pendingVolcano) {
+    lavaPools.push({ wx, wy, radius: CELL * 3, life: 3600, maxLife: 3600, dmgTimer: 0 });
+    pendingVolcano = false;
+    canvas.style.cursor = 'crosshair';
+    tooltip.textContent = '[ LAVA POOL PLACED — BURNS FOR 60s ]';
+    return;
+  }
+  if (pendingTornado) {
+    tornadoes.push({ wx, wy, radius: CELL * 2.5, life: 3600, maxLife: 3600, dmgTimer: 0, spin: 0 });
+    pendingTornado = false;
+    canvas.style.cursor = 'crosshair';
+    tooltip.textContent = '[ TORNADO PLACED — SPINS FOR 60s ]';
+    return;
+  }
+  if (pendingMeteor) {
+    meteors.push({ wx, wy: -CELL * 3, w: CELL * 1.2, h: CELL * 2, speed: 9, hitCount: 0, hitEnemies: new Set(), done: false });
+    pendingMeteor = false;
+    canvas.style.cursor = 'crosshair';
+    tooltip.textContent = '[ METEOR INBOUND! ]';
+    return;
+  }
+  if (pendingBlackhole) {
+    blackholes.push({ wx, wy, radius: CELL * 3.5, life: 1800, maxLife: 1800, spin: 0, dmgTimer: 0 });
+    pendingBlackhole = false;
+    canvas.style.cursor = 'crosshair';
+    tooltip.textContent = '[ BLACK HOLE DEPLOYED — 30s ]';
+    return;
+  }
+  if (selectedDisaster === 'lightning') { strikeLightning(); return; }
+  if (selectedDisaster === 'tsunami')   { launchTsunami();   return; }
+  if (selectedDisaster === 'earthquake'){ triggerEarthquake(); return; }
+  if (selectedDisaster === 'blizzard')  { triggerBlizzard();  return; }
+  if (selectedDisaster === 'hailstorm') { triggerHailstorm(); return; }
   // Clicking an existing upgradeable turret always upgrades it (takes priority)
   if (!deleteMode && selectedTool !== 'nuke' && selectedTool !== 'bomb' && selectedTool !== 'tank' && selectedTool !== 'landmine') {
     // Laser rod upgrade
@@ -3279,7 +3451,6 @@ canvas.addEventListener('click', e => {
   }
   if (selectedTool === 'bomb') {
     if (credits < 50) return;
-    // If clicking on a cannon, load the bomb onto it
     const cannon = towers.find(t => t instanceof Cannon && t.gx === gx && t.gy === gy);
     if (cannon) {
       credits -= 50;
@@ -3739,16 +3910,56 @@ function loop(ts) {
   drawBackground();
   drawGrid();
 
+  // Screen shake offset
+  if (screenShake > 0) {
+    const mag = Math.min(screenShake, 10) * 0.5;
+    ctx.save();
+    ctx.translate((Math.random() - 0.5) * mag, (Math.random() - 0.5) * mag);
+  }
+
   // Update
   updateSpawning();
   for (const t of towers) t.update();
   for (const s of spikes) s.update();
   for (const m of muds) m.update();
+  for (const tor of tornadoes) {
+    for (const e of enemies) {
+      if (e.dead || e.reached) continue;
+      const dx = e.wx - tor.wx, dy = e.wy - tor.wy;
+      if (Math.sqrt(dx*dx + dy*dy) <= tor.radius) e._slowFactor = Math.min(e._slowFactor || 1, 0.5);
+    }
+  }
+  // Blizzard freeze — BEFORE enemy.update()
+  if (blizzardTimer > 0) {
+    for (const e of enemies) {
+      if (e.dead || e.reached) continue;
+      e._slowFactor = 0.0001; // near-zero = frozen
+    }
+  }
+  // Black hole slow — BEFORE enemy.update()
+  for (const bh of blackholes) {
+    for (const e of enemies) {
+      if (e.dead || e.reached) continue;
+      const dx = e.wx - bh.wx, dy = e.wy - bh.wy;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist <= bh.radius) {
+        e._slowFactor = Math.min(e._slowFactor || 1, 0.08);
+      }
+    }
+  }
   for (const lm of landmines) lm.update();
   for (const e of enemies) e.update();
   for (const p of projectiles) p.update();
   for (const tank of armyTanks) tank.update();
   updateParticles();
+  updateTsunami();
+  updateEarthquake();
+  updateLavaPools();
+  updateTornadoes();
+  updateMeteors();
+  updateBlizzard();
+  updateBlackholes();
+  updateHailstorm();
 
   // Check lives
   for (const e of enemies) {
@@ -3774,6 +3985,9 @@ function loop(ts) {
 
   // Draw
   drawHoverCell();
+  drawVolcanoPreview();
+  drawTornadoPreview();
+  drawMeteorPreview();
   for (const m of muds) m.draw();
   for (const lm of landmines) lm.draw();
   for (const r of laserRods) r.draw();
@@ -3783,8 +3997,1190 @@ function loop(ts) {
   for (const tank of armyTanks) tank.draw();
   for (const e of enemies) e.draw();
   for (const p of projectiles) p.draw();
+  drawTsunami();
+  drawLightning();
+  drawEarthquakeCracks();
+  drawLavaPools();
+  drawTornadoes();
+  drawMeteors();
+  drawBlackholes();
+  drawBlizzard();
+  drawHailstorm();
+  drawBlackholePreview();
   drawParticles();
+  if (screenShake > 0) ctx.restore();
 }
+
+// ---- DISASTER PANEL ----
+const disasterBtn  = document.getElementById('disaster-btn');
+const disasterPanel = document.getElementById('disaster-panel');
+const disasterLightningBtn = document.getElementById('disaster-lightning');
+const disasterTsunamiBtn   = document.getElementById('disaster-tsunami');
+
+let selectedDisaster = null;
+function selectDisaster(name) {
+  selectedDisaster = name;
+  document.querySelectorAll('.disaster-btn').forEach(b => {
+    b.classList.toggle('active', b.id === `disaster-${name}`);
+  });
+  disasterPanel.classList.remove('open');
+  disasterBtn.classList.remove('active');
+  canvas.style.cursor = 'crosshair';
+  const labels = { lightning: 'LIGHTNING — CLICK BOARD TO STRIKE', tsunami: 'TSUNAMI — CLICK BOARD TO LAUNCH', earthquake: 'EARTHQUAKE — CLICK BOARD TO TRIGGER', blizzard: 'BLIZZARD — CLICK BOARD TO FREEZE', hailstorm: 'HAILSTORM — CLICK BOARD TO TRIGGER' };
+  tooltip.textContent = `[ ${labels[name]} ]`;
+}
+function clearDisaster() {
+  selectedDisaster = null;
+  document.querySelectorAll('.disaster-btn').forEach(b => b.classList.remove('active'));
+}
+
+disasterBtn.addEventListener('click', () => {
+  const open = disasterPanel.classList.toggle('open');
+  disasterBtn.classList.toggle('active', open);
+  // close shop if open
+  if (open) { toolbar.classList.remove('open'); shopBtn.classList.remove('active'); }
+});
+
+// ---- LIGHTNING ----
+// Each bolt is { x, y, segments: [{x1,y1,x2,y2}], life, decay }
+let lightningEffects = [];
+
+function spawnLightningBolt(tx, ty) {
+  const segments = [];
+  // Start from top of canvas at the enemy's x position, slightly randomised
+  let cx = tx + (Math.random() - 0.5) * CELL * 2;
+  let cy = 0;
+  const steps = 10 + Math.floor(Math.random() * 6);
+  for (let i = 0; i < steps; i++) {
+    const nx = cx + (Math.random() - 0.5) * CELL * 1.8;
+    const ny = cy + (ty - 0) / steps + (Math.random() - 0.5) * CELL * 0.5;
+    segments.push({ x1: cx, y1: cy, x2: nx, y2: ny });
+    cx = nx; cy = ny;
+  }
+  // Final segment to target
+  segments.push({ x1: cx, y1: cy, x2: tx, y2: ty });
+  lightningEffects.push({ segments, life: 1, decay: 0.06 });
+}
+
+function strikeLightning() {
+  if (gameOver) return;
+  if (credits < 150) { tooltip.textContent = '[ NOT ENOUGH CREDITS FOR LIGHTNING — 150cr ]'; return; }
+  const alive = enemies.filter(e => !e.dead && !e.reached);
+  if (alive.length === 0) { tooltip.textContent = '[ NO ENEMIES TO STRIKE ]'; return; }
+  credits -= 150;
+  const targets = [...alive].sort(() => Math.random() - 0.5).slice(0, 3);
+  for (const e of targets) {
+    const dmg = e.isBoss ? 3000 : 8000;
+    e.takeDamage(dmg);
+    if (e.dead) { credits += enemyReward(e); updateHUD(); }
+    spawnLightningBolt(e.wx, e.wy);
+    spawnExplosion(e.wx, e.wy);
+  }
+  tooltip.textContent = `[ LIGHTNING STRUCK ${targets.length} ENEMI${targets.length > 1 ? 'ES' : 'Y'} ]`;
+}
+
+function drawLightning() {
+  for (const bolt of lightningEffects) {
+    const alpha = bolt.life;
+    ctx.save();
+    // Outer glow pass
+    ctx.strokeStyle = `rgba(220,180,255,${alpha * 0.4})`;
+    ctx.lineWidth = 5;
+    ctx.shadowBlur = 18;
+    ctx.shadowColor = '#cc88ff';
+    ctx.beginPath();
+    for (const s of bolt.segments) {
+      ctx.moveTo(s.x1, s.y1);
+      ctx.lineTo(s.x2, s.y2);
+    }
+    ctx.stroke();
+    // Core bright line
+    ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+    ctx.lineWidth = 1.5;
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = '#ffffff';
+    ctx.beginPath();
+    for (const s of bolt.segments) {
+      ctx.moveTo(s.x1, s.y1);
+      ctx.lineTo(s.x2, s.y2);
+    }
+    ctx.stroke();
+    ctx.restore();
+    bolt.life -= bolt.decay;
+  }
+  lightningEffects = lightningEffects.filter(b => b.life > 0);
+}
+
+// ---- TSUNAMI ----
+// { x, life, decay } — x is the leading edge sweeping right across the board
+let tsunamiEffects = [];
+let tsunamiActive = false; // prevent stacking
+
+function launchTsunami() {
+  if (gameOver) return;
+  if (credits < 200) { tooltip.textContent = '[ NOT ENOUGH CREDITS FOR TSUNAMI — 200cr ]'; return; }
+  if (tsunamiActive) { tooltip.textContent = '[ TSUNAMI ALREADY IN PROGRESS ]'; return; }
+  credits -= 200;
+  updateHUD();
+  tsunamiActive = true;
+  tsunamiEffects.push({ x: canvas.width + CELL * 2, life: 1 });
+  tooltip.textContent = '[ TSUNAMI INCOMING! ]';
+}
+
+function updateTsunami() {
+  for (const w of tsunamiEffects) {
+    w.x -= CELL * 0.6; // sweeps right to left
+    for (const e of enemies) {
+      if (e.dead || e.reached) continue;
+      if (e.wx >= w.x - CELL * 0.5 && e.wx <= w.x + CELL * 1.5 && !e._tsunamiHit) {
+        e._tsunamiHit = true;
+        const dmg = e.isBoss ? 2000 : 5000;
+        e.takeDamage(dmg);
+        if (e.dead) { credits += enemyReward(e); updateHUD(); }
+        if (!e.dead) e._tsunamiSlow = 180;
+      }
+    }
+    if (w.x < -CELL * 3) {
+      w.done = true;
+      tsunamiActive = false;
+    }
+  }
+  tsunamiEffects = tsunamiEffects.filter(w => !w.done);
+  // Apply tsunami slow each frame (decrement counter)
+  for (const e of enemies) {
+    if (e._tsunamiSlow > 0) {
+      e._slowFactor = Math.min(e._slowFactor || 1, 0.2);
+      e._tsunamiSlow--;
+    }
+  }
+}
+
+function drawTsunami() {
+  for (const w of tsunamiEffects) {
+    const waveX = w.x;
+    ctx.save();
+    // Wave body — vertical gradient band (trailing to the right)
+    const grad = ctx.createLinearGradient(waveX - CELL * 1.5, 0, waveX + CELL * 3, 0);
+    grad.addColorStop(0,   'rgba(180,240,255,0.15)');
+    grad.addColorStop(0.15,'rgba(80,200,255,0.45)');
+    grad.addColorStop(0.5, 'rgba(30,140,255,0.25)');
+    grad.addColorStop(1,   'rgba(0,100,255,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(waveX - CELL * 1.5, 0, CELL * 4.5, canvas.height);
+    // Crest line
+    ctx.strokeStyle = 'rgba(180,240,255,0.85)';
+    ctx.lineWidth = 3;
+    ctx.shadowBlur = 14;
+    ctx.shadowColor = '#40c0ff';
+    ctx.beginPath();
+    const segments = 30;
+    for (let i = 0; i <= segments; i++) {
+      const yy = (canvas.height / segments) * i;
+      const xx = waveX + Math.sin(yy * 0.04 + Date.now() * 0.004) * CELL * 0.4;
+      i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    }
+    ctx.stroke();
+    // Foam spray particles along crest
+    ctx.globalAlpha = 0.6;
+    ctx.fillStyle = '#aaeeff';
+    for (let i = 0; i < 12; i++) {
+      const yy = (canvas.height / 12) * i + Math.random() * 10;
+      const xx = waveX + (Math.random() - 0.5) * CELL * 0.5;
+      ctx.beginPath();
+      ctx.arc(xx, yy, Math.random() * 3 + 1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
+// ---- EARTHQUAKE ----
+let screenShake = 0;          // frames remaining
+let earthquakeCracks = [];    // [{ segs:[{x1,y1,x2,y2}], life, decay }]
+const disasterEarthquakeBtn = document.getElementById('disaster-earthquake');
+
+function triggerEarthquake() {
+  if (gameOver) return;
+  if (credits < 200) { tooltip.textContent = '[ NOT ENOUGH CREDITS FOR EARTHQUAKE — 200cr ]'; return; }
+  credits -= 200;
+  updateHUD();
+
+  // Damage + stun all enemies
+  for (const e of enemies) {
+    if (e.dead || e.reached) continue;
+    const dmg = e.isBoss ? 500 : 4000;
+    e.takeDamage(dmg);
+    if (e.dead) { credits += enemyReward(e); updateHUD(); }
+    else e._stunFrames = 90; // 1.5s stun
+  }
+
+  // Screen shake for 1.5s
+  screenShake = 90;
+
+  // Generate random crack lines across the board
+  earthquakeCracks = [];
+  const numCracks = 12 + Math.floor(Math.random() * 8);
+  for (let i = 0; i < numCracks; i++) {
+    const segs = [];
+    let cx = Math.random() * canvas.width;
+    let cy = Math.random() * canvas.height;
+    const length = 5 + Math.floor(Math.random() * 6);
+    for (let s = 0; s < length; s++) {
+      const nx = cx + (Math.random() - 0.5) * CELL * 2.5;
+      const ny = cy + (Math.random() * CELL * 1.5);
+      segs.push({ x1: cx, y1: cy, x2: nx, y2: ny });
+      cx = nx; cy = ny;
+    }
+    earthquakeCracks.push({ segs, life: 1, decay: 0.008 + Math.random() * 0.004 });
+  }
+
+  // Debris particles erupting from random ground points
+  for (let i = 0; i < 120; i++) {
+    const px = Math.random() * canvas.width;
+    const py = Math.random() * canvas.height;
+    const speed = Math.random() * 5 + 1.5;
+    const angle = -Math.PI * 0.5 + (Math.random() - 0.5) * Math.PI * 0.8;
+    const t = Math.random();
+    particles.push({
+      x: px, y: py,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 0.7 + Math.random() * 0.3,
+      decay: 0.012 + Math.random() * 0.01,
+      size: Math.random() * 5 + 2,
+      color: t < 0.4 ? '#8b6914' : t < 0.7 ? '#a07840' : '#c8a870'
+    });
+  }
+
+  tooltip.textContent = '[ EARTHQUAKE! ALL ENEMIES STUNNED ]';
+}
+
+function updateEarthquake() {
+  // Apply stun: set slowFactor to near-zero for stunned enemies (read next frame by e.update)
+  for (const e of enemies) {
+    if (e._stunFrames > 0) {
+      e._slowFactor = 0.001;
+      e._stunFrames--;
+    }
+  }
+  // Fade cracks
+  for (const c of earthquakeCracks) c.life -= c.decay;
+  earthquakeCracks = earthquakeCracks.filter(c => c.life > 0);
+  // Count down shake
+  if (screenShake > 0) screenShake--;
+}
+
+function drawEarthquakeCracks() {
+  for (const crack of earthquakeCracks) {
+    ctx.save();
+    ctx.strokeStyle = `rgba(180,120,40,${crack.life * 0.8})`;
+    ctx.lineWidth = 1.5;
+    ctx.shadowBlur = 4;
+    ctx.shadowColor = `rgba(255,180,60,${crack.life})`;
+    ctx.beginPath();
+    for (const s of crack.segs) {
+      ctx.moveTo(s.x1, s.y1);
+      ctx.lineTo(s.x2, s.y2);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+// ---- VOLCANIC ERUPTION ----
+let lavaPools = [];
+let pendingVolcano = false;
+const disasterVolcanoBtn = document.getElementById('disaster-volcano');
+
+function triggerVolcano() {
+  if (gameOver) return;
+  if (credits < 1000) { tooltip.textContent = '[ NOT ENOUGH CREDITS FOR VOLCANIC ERUPTION — 1000cr ]'; return; }
+  credits -= 1000;
+  updateHUD();
+  pendingVolcano = true;
+  canvas.style.cursor = 'cell';
+  tooltip.textContent = '[ CLICK TO PLACE LAVA POOL ]';
+  disasterPanel.classList.remove('open');
+  disasterBtn.classList.remove('active');
+}
+
+function updateLavaPools() {
+  for (const pool of lavaPools) {
+    pool.life--;
+    pool.dmgTimer++;
+    if (pool.dmgTimer >= 10) { // damage tick every 10 frames (6×/sec)
+      pool.dmgTimer = 0;
+      for (const e of enemies) {
+        if (e.dead || e.reached) continue;
+        const dx = e.wx - pool.wx, dy = e.wy - pool.wy;
+        if (Math.sqrt(dx*dx + dy*dy) <= pool.radius) {
+          const dmg = e.isBoss ? 300 : 1500;
+          e.takeDamage(dmg);
+          if (e.dead) { credits += enemyReward(e); updateHUD(); }
+        }
+      }
+    }
+  }
+  lavaPools = lavaPools.filter(p => p.life > 0);
+}
+
+function drawLavaPools() {
+  const t = Date.now() * 0.001;
+  for (const pool of lavaPools) {
+    const alpha = Math.min(1, pool.life / 60); // fade out last second
+    const r = pool.radius;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+
+    // Outer glow
+    const outerGrad = ctx.createRadialGradient(pool.wx, pool.wy, r * 0.6, pool.wx, pool.wy, r * 1.15);
+    outerGrad.addColorStop(0, 'rgba(255,80,0,0)');
+    outerGrad.addColorStop(1, 'rgba(255,40,0,0.18)');
+    ctx.fillStyle = outerGrad;
+    ctx.beginPath();
+    ctx.arc(pool.wx, pool.wy, r * 1.15, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Lava body gradient
+    const grad = ctx.createRadialGradient(pool.wx, pool.wy, 0, pool.wx, pool.wy, r);
+    grad.addColorStop(0,   'rgba(255,240,80,0.95)');
+    grad.addColorStop(0.3, 'rgba(255,120,0,0.9)');
+    grad.addColorStop(0.7, 'rgba(200,40,0,0.85)');
+    grad.addColorStop(1,   'rgba(80,10,0,0.7)');
+    ctx.fillStyle = grad;
+    ctx.shadowBlur = 30;
+    ctx.shadowColor = '#ff4400';
+    ctx.beginPath();
+    ctx.arc(pool.wx, pool.wy, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Animated bubbles
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = '#ffaa00';
+    for (let i = 0; i < 7; i++) {
+      const angle = (i / 7) * Math.PI * 2 + t * (0.5 + i * 0.13);
+      const dist = (0.2 + ((Math.sin(t * 1.3 + i) + 1) / 2) * 0.55) * r;
+      const bx = pool.wx + Math.cos(angle) * dist;
+      const by = pool.wy + Math.sin(angle) * dist;
+      const br = (3 + Math.sin(t * 2 + i * 1.4) * 2) * (r / (CELL * 3));
+      const hot = (Math.sin(t * 3 + i) + 1) / 2;
+      ctx.fillStyle = hot > 0.5 ? '#ffee88' : '#ff6600';
+      ctx.beginPath();
+      ctx.arc(bx, by, Math.max(2, br), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+
+    // Timer ring
+    const progress = pool.life / pool.maxLife;
+    ctx.strokeStyle = `rgba(255,200,50,0.5)`;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.arc(pool.wx, pool.wy, r + 4, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * progress);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.restore();
+  }
+}
+
+// Hover preview for pending volcano placement
+function drawVolcanoPreview() {
+  if (!pendingVolcano || !hoverCell) return;
+  const rect = canvas.getBoundingClientRect();
+  // Use raw mouse position for smooth preview — fall back to cell center
+  const px = hoverCell.gx * CELL + CELL / 2;
+  const py = hoverCell.gy * CELL + CELL / 2;
+  const r = CELL * 3;
+  ctx.save();
+  ctx.globalAlpha = 0.45;
+  ctx.strokeStyle = '#ff6600';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([6, 4]);
+  ctx.shadowBlur = 12;
+  ctx.shadowColor = '#ff4400';
+  ctx.beginPath();
+  ctx.arc(px, py, r, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(255,80,0,0.15)';
+  ctx.fill();
+  ctx.setLineDash([]);
+  ctx.restore();
+}
+
+// ---- TORNADO ----
+let tornadoes = [];
+let pendingTornado = false;
+const disasterTornadoBtn = document.getElementById('disaster-tornado');
+
+function triggerTornado() {
+  if (gameOver) return;
+  if (credits < 500) { tooltip.textContent = '[ NOT ENOUGH CREDITS FOR TORNADO — 500cr ]'; return; }
+  credits -= 500;
+  updateHUD();
+  pendingTornado = true;
+  canvas.style.cursor = 'cell';
+  tooltip.textContent = '[ CLICK TO PLACE TORNADO ]';
+  disasterPanel.classList.remove('open');
+  disasterBtn.classList.remove('active');
+}
+
+function updateTornadoes() {
+  for (const t of tornadoes) {
+    t.life--;
+    t.spin += 0.12;
+    t.dmgTimer++;
+    if (t.dmgTimer >= 10) {
+      t.dmgTimer = 0;
+      for (const e of enemies) {
+        if (e.dead || e.reached) continue;
+        const dx = e.wx - t.wx, dy = e.wy - t.wy;
+        if (Math.sqrt(dx*dx + dy*dy) <= t.radius) {
+          const dmg = e.isBoss ? 40 : 180;
+          e.takeDamage(dmg);
+          if (e.dead) { credits += enemyReward(e); updateHUD(); }
+        }
+      }
+    }
+  }
+  tornadoes = tornadoes.filter(t => t.life > 0);
+}
+function drawTornadoes() {
+  for (const t of tornadoes) {
+    const alpha = Math.min(1, t.life / 60);
+    const r = t.radius;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+
+    // Draw spinning funnel rings — wide at top, narrow at bottom
+    const rings = 10;
+    for (let i = 0; i < rings; i++) {
+      const frac = i / (rings - 1);          // 0 = top (wide), 1 = bottom (narrow)
+      const ringR = r * (1 - frac * 0.75);   // shrinks toward base
+      const yOff  = (frac - 0.5) * r * 1.4; // vertical spread
+      const angle = t.spin + frac * Math.PI * 3;
+      const wobble = Math.sin(t.spin * 2 + frac * 4) * CELL * 0.15;
+
+      const grayVal = Math.round(160 + frac * 60);
+      ctx.strokeStyle = `rgba(${grayVal},${grayVal},${grayVal + 20},${0.25 + (1 - frac) * 0.45})`;
+      ctx.lineWidth = 1.5 + (1 - frac) * 2;
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = '#aaccff';
+      ctx.beginPath();
+      ctx.ellipse(t.wx + wobble, t.wy + yOff, ringR, ringR * 0.22, angle, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Central dark vortex core
+    const coreGrad = ctx.createRadialGradient(t.wx, t.wy, 0, t.wx, t.wy, r * 0.35);
+    coreGrad.addColorStop(0, 'rgba(40,40,80,0.7)');
+    coreGrad.addColorStop(1, 'rgba(40,40,80,0)');
+    ctx.fillStyle = coreGrad;
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.arc(t.wx, t.wy, r * 0.35, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Flying debris — small dots orbiting the vortex
+    for (let i = 0; i < 8; i++) {
+      const a = t.spin * (1.5 + i * 0.1) + (i / 8) * Math.PI * 2;
+      const dist = r * (0.2 + (i % 3) * 0.22);
+      const yOff = Math.sin(a * 0.7) * r * 0.3;
+      ctx.fillStyle = i % 2 === 0 ? 'rgba(180,180,200,0.7)' : 'rgba(120,100,80,0.6)';
+      ctx.beginPath();
+      ctx.arc(t.wx + Math.cos(a) * dist, t.wy + yOff + Math.sin(a) * dist * 0.25, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Timer ring
+    const progress = t.life / t.maxLife;
+    ctx.strokeStyle = 'rgba(180,200,255,0.4)';
+    ctx.lineWidth = 2;
+    ctx.shadowBlur = 0;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.arc(t.wx, t.wy, r + 4, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * progress);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.restore();
+  }
+}
+
+function drawTornadoPreview() {
+  if (!pendingTornado || !hoverCell) return;
+  const px = hoverCell.gx * CELL + CELL / 2;
+  const py = hoverCell.gy * CELL + CELL / 2;
+  const r = CELL * 2.5;
+  ctx.save();
+  ctx.globalAlpha = 0.45;
+  ctx.strokeStyle = '#aabbff';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([6, 4]);
+  ctx.shadowBlur = 12;
+  ctx.shadowColor = '#8899ff';
+  ctx.beginPath();
+  ctx.arc(px, py, r, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(100,120,255,0.1)';
+  ctx.fill();
+  ctx.setLineDash([]);
+  ctx.restore();
+}
+
+// ---- METEOR ----
+let meteors = [];
+let pendingMeteor = false;
+const disasterMeteorBtn = document.getElementById('disaster-meteor');
+
+function triggerMeteor() {
+  if (gameOver) return;
+  if (credits < 250) { tooltip.textContent = '[ NOT ENOUGH CREDITS FOR METEOR — 250cr ]'; return; }
+  credits -= 250;
+  updateHUD();
+  pendingMeteor = true;
+  canvas.style.cursor = 'cell';
+  tooltip.textContent = '[ CLICK TO AIM METEOR COLUMN ]';
+  disasterPanel.classList.remove('open');
+  disasterBtn.classList.remove('active');
+}
+
+function updateMeteors() {
+  for (const m of meteors) {
+    m.wy += m.speed;
+    // Spawn fire trail particles
+    if (Math.random() < 0.7) {
+      particles.push({
+        x: m.wx + (Math.random() - 0.5) * m.w * 0.6,
+        y: m.wy - m.h * 0.5,
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: -Math.random() * 2 - 0.5,
+        life: 0.8 + Math.random() * 0.3,
+        decay: 0.04 + Math.random() * 0.03,
+        size: Math.random() * 5 + 2,
+        color: Math.random() > 0.5 ? '#ff6600' : '#ffcc00'
+      });
+    }
+    // Hit enemies along the falling strip
+    if (m.hitCount < 5) {
+      for (const e of enemies) {
+        if (e.dead || e.reached || m.hitEnemies.has(e)) continue;
+        if (Math.abs(e.wx - m.wx) <= m.w * 0.5 + e.size &&
+            e.wy >= m.wy - m.h * 0.5 - e.size &&
+            e.wy <= m.wy + m.h * 0.5 + e.size) {
+          m.hitEnemies.add(e);
+          m.hitCount++;
+          const dmg = e.isBoss ? 3000 : 8000;
+          e.takeDamage(dmg);
+          if (e.dead) { credits += enemyReward(e); updateHUD(); }
+          spawnExplosion(e.wx, e.wy);
+          if (m.hitCount >= 5) break;
+        }
+      }
+    }
+    // Impact explosion when hitting the bottom
+    if (!m._impacted && m.wy >= canvas.height - m.h) {
+      m._impacted = true;
+      for (let i = 0; i < 50; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 7 + 2;
+        particles.push({
+          x: m.wx, y: canvas.height,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 4,
+          life: 1,
+          decay: 0.02 + Math.random() * 0.02,
+          size: Math.random() * 7 + 3,
+          color: Math.random() > 0.4 ? '#ff6600' : Math.random() > 0.5 ? '#ffcc00' : '#ffffff'
+        });
+      }
+    }
+    if (m.wy > canvas.height + m.h * 2) m.done = true;
+  }
+  meteors = meteors.filter(m => !m.done);
+}
+
+function drawMeteors() {
+  for (const m of meteors) {
+    ctx.save();
+    // Glow
+    ctx.shadowBlur = 24;
+    ctx.shadowColor = '#ff4400';
+    // Body — tapered rectangle, wider at top
+    const grad = ctx.createLinearGradient(m.wx - m.w * 0.5, m.wy - m.h, m.wx + m.w * 0.5, m.wy);
+    grad.addColorStop(0, '#ffee88');
+    grad.addColorStop(0.3, '#ff8800');
+    grad.addColorStop(1, '#aa2200');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(m.wx - m.w * 0.5, m.wy - m.h * 0.5); // top-left
+    ctx.lineTo(m.wx + m.w * 0.5, m.wy - m.h * 0.5); // top-right
+    ctx.lineTo(m.wx + m.w * 0.3, m.wy + m.h * 0.5); // bottom-right (tapered)
+    ctx.lineTo(m.wx - m.w * 0.3, m.wy + m.h * 0.5); // bottom-left (tapered)
+    ctx.closePath();
+    ctx.fill();
+    // Bright core streak
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = '#ffffff';
+    ctx.strokeStyle = 'rgba(255,255,200,0.7)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(m.wx, m.wy - m.h * 0.4);
+    ctx.lineTo(m.wx, m.wy + m.h * 0.3);
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function drawMeteorPreview() {
+  if (!pendingMeteor || !hoverCell) return;
+  const px = hoverCell.gx * CELL + CELL / 2;
+  ctx.save();
+  ctx.globalAlpha = 0.35;
+  ctx.strokeStyle = '#ff8800';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([6, 5]);
+  ctx.shadowBlur = 8;
+  ctx.shadowColor = '#ff4400';
+  // Vertical column guide
+  ctx.strokeRect(px - CELL * 0.6, 0, CELL * 1.2, canvas.height);
+  ctx.setLineDash([]);
+  ctx.restore();
+}
+
+disasterMeteorBtn.addEventListener('click', triggerMeteor);
+
+// ---- BLIZZARD ----
+let blizzardTimer = 0;
+const blizzardDuration = 180; // 3 seconds at 60fps
+let blizzardSnowflakes = []; // { x, y, vx, vy, size, life }
+
+function triggerBlizzard() {
+  if (gameOver) return;
+  if (credits < 250) { tooltip.textContent = '[ NOT ENOUGH CREDITS FOR BLIZZARD — 250cr ]'; return; }
+  credits -= 250;
+  updateHUD();
+  blizzardTimer = blizzardDuration;
+  screenShake = 6;
+  // Spawn initial snowflake burst
+  for (let i = 0; i < 80; i++) {
+    blizzardSnowflakes.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * -canvas.height,
+      vx: (Math.random() - 0.5) * 2,
+      vy: Math.random() * 3 + 1.5,
+      size: Math.random() * 4 + 1.5,
+      life: 1
+    });
+  }
+  tooltip.textContent = '[ BLIZZARD — ENEMIES FROZEN FOR 3s ]';
+}
+
+function updateBlizzard() {
+  if (blizzardTimer > 0) {
+    blizzardTimer--;
+    // Continuously spawn snowflakes
+    for (let i = 0; i < 5; i++) {
+      blizzardSnowflakes.push({
+        x: Math.random() * canvas.width,
+        y: -8,
+        vx: (Math.random() - 0.5) * 2,
+        vy: Math.random() * 3 + 1.5,
+        size: Math.random() * 4 + 1.5,
+        life: 1
+      });
+    }
+  }
+  for (const s of blizzardSnowflakes) {
+    s.x += s.vx;
+    s.y += s.vy;
+    if (s.y > canvas.height + 10) s.life = 0;
+  }
+  blizzardSnowflakes = blizzardSnowflakes.filter(s => s.life > 0);
+}
+
+function drawBlizzard() {
+  if (blizzardSnowflakes.length === 0) return;
+  ctx.save();
+  // Blue tint overlay while active
+  if (blizzardTimer > 0) {
+    const alpha = Math.min(blizzardTimer / 40, 0.22);
+    ctx.fillStyle = `rgba(100,180,255,${alpha})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  // Draw snowflakes
+  ctx.shadowBlur = 6;
+  ctx.shadowColor = '#aaddff';
+  for (const s of blizzardSnowflakes) {
+    ctx.fillStyle = `rgba(200,230,255,${s.life * 0.85})`;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+// ---- BLACK HOLE ----
+let blackholes = [];
+let pendingBlackhole = false;
+const disasterBlackholeBtn = document.getElementById('disaster-blackhole');
+
+function triggerBlackhole() {
+  if (gameOver) return;
+  if (credits < 700) { tooltip.textContent = '[ NOT ENOUGH CREDITS FOR BLACK HOLE — 700cr ]'; return; }
+  credits -= 700;
+  updateHUD();
+  pendingBlackhole = true;
+  canvas.style.cursor = 'cell';
+  tooltip.textContent = '[ CLICK TO PLACE BLACK HOLE ]';
+  disasterPanel.classList.remove('open');
+  disasterBtn.classList.remove('active');
+}
+
+function updateBlackholes() {
+  for (const bh of blackholes) {
+    bh.life--;
+    bh.spin += 0.05;
+    bh.dmgTimer++;
+    // Deal damage every 30 frames to enemies inside
+    if (bh.dmgTimer >= 30) {
+      bh.dmgTimer = 0;
+      for (const e of enemies) {
+        if (e.dead || e.reached) continue;
+        const dx = e.wx - bh.wx, dy = e.wy - bh.wy;
+        if (Math.sqrt(dx*dx + dy*dy) <= bh.radius) {
+          const dmg = e.isBoss ? 200 : 1000;
+          e.takeDamage(dmg);
+          if (e.dead) { credits += enemyReward(e); updateHUD(); }
+        }
+      }
+    }
+  }
+  blackholes = blackholes.filter(bh => bh.life > 0);
+}
+
+function drawBlackholes() {
+  for (const bh of blackholes) {
+    const alpha = Math.min(bh.life / 60, 1);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    // Dark void core
+    const rGrad = ctx.createRadialGradient(bh.wx, bh.wy, 0, bh.wx, bh.wy, bh.radius);
+    rGrad.addColorStop(0, 'rgba(0,0,0,0.95)');
+    rGrad.addColorStop(0.35, 'rgba(10,0,30,0.85)');
+    rGrad.addColorStop(0.7, 'rgba(60,0,100,0.45)');
+    rGrad.addColorStop(1, 'rgba(80,0,120,0)');
+    ctx.fillStyle = rGrad;
+    ctx.beginPath();
+    ctx.arc(bh.wx, bh.wy, bh.radius, 0, Math.PI * 2);
+    ctx.fill();
+    // Swirling accretion rings
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = '#8800ff';
+    for (let ring = 0; ring < 3; ring++) {
+      const r = bh.radius * (0.35 + ring * 0.22);
+      const offset = bh.spin + ring * (Math.PI * 2 / 3);
+      ctx.strokeStyle = `rgba(${130 + ring*40},0,${200 + ring*20},${0.6 - ring*0.15})`;
+      ctx.lineWidth = 2 - ring * 0.4;
+      ctx.beginPath();
+      for (let a = 0; a < Math.PI * 2; a += 0.15) {
+        const wobble = 1 + 0.08 * Math.sin(a * 6 + offset);
+        const px = bh.wx + Math.cos(a + offset * 0.3) * r * wobble;
+        const py = bh.wy + Math.sin(a + offset * 0.3) * r * wobble * 0.5;
+        if (a === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+    // Bright event horizon rim
+    ctx.shadowColor = '#cc44ff';
+    ctx.shadowBlur = 18;
+    ctx.strokeStyle = `rgba(180,80,255,0.7)`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(bh.wx, bh.wy, bh.radius * 0.28, 0, Math.PI * 2);
+    ctx.stroke();
+    // Timer arc
+    const pct = bh.life / bh.maxLife;
+    ctx.strokeStyle = `rgba(180,80,255,0.35)`;
+    ctx.lineWidth = 3;
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.arc(bh.wx, bh.wy, bh.radius + 4, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * pct);
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function drawBlackholePreview() {
+  if (!pendingBlackhole || !hoverCell) return;
+  const px = hoverCell.gx * CELL + CELL / 2;
+  const py = hoverCell.gy * CELL + CELL / 2;
+  const r = CELL * 3.5;
+  ctx.save();
+  ctx.globalAlpha = 0.35;
+  ctx.strokeStyle = '#aa44ff';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([5, 5]);
+  ctx.shadowBlur = 8;
+  ctx.shadowColor = '#8800ff';
+  ctx.beginPath();
+  ctx.arc(px, py, r, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(60,0,100,0.15)';
+  ctx.fill();
+  ctx.setLineDash([]);
+  ctx.restore();
+}
+
+disasterBlackholeBtn.addEventListener('click', triggerBlackhole);
+
+// ---- HAILSTORM ----
+let hailstormTimer = 0;
+const hailstormDuration = 480; // 8 seconds
+let hailPellets = []; // { x, y, vy, size, life }
+
+function triggerHailstorm() {
+  if (gameOver) return;
+  if (credits < 300) { tooltip.textContent = '[ NOT ENOUGH CREDITS FOR HAILSTORM — 300cr ]'; return; }
+  credits -= 300;
+  updateHUD();
+  hailstormTimer = hailstormDuration;
+  screenShake = 5;
+  tooltip.textContent = '[ HAILSTORM — 8s OF ICY BOMBARDMENT ]';
+}
+
+function updateHailstorm() {
+  if (hailstormTimer > 0) {
+    hailstormTimer--;
+    // Spawn pellets each frame
+    for (let i = 0; i < 4; i++) {
+      hailPellets.push({
+        x: Math.random() * canvas.width,
+        y: -6,
+        vy: Math.random() * 8 + 6,
+        vx: (Math.random() - 0.5) * 2,
+        size: Math.random() * 5 + 3,
+        life: 1,
+        hit: false
+      });
+    }
+  }
+  for (const h of hailPellets) {
+    h.x += h.vx;
+    h.y += h.vy;
+    if (!h.hit) {
+      for (const e of enemies) {
+        if (e.dead || e.reached) continue;
+        const dx = e.wx - h.x, dy = e.wy - h.y;
+        if (Math.sqrt(dx*dx + dy*dy) < e.size + h.size) {
+          h.hit = true;
+          const dmg = e.isBoss ? 200 : 1500;
+          e.takeDamage(dmg);
+          if (e.dead) { credits += enemyReward(e); updateHUD(); }
+          // Small ice shard burst
+          for (let k = 0; k < 5; k++) {
+            const angle = Math.random() * Math.PI * 2;
+            particles.push({
+              x: h.x, y: h.y,
+              vx: Math.cos(angle) * (Math.random() * 3 + 1),
+              vy: Math.sin(angle) * (Math.random() * 3 + 1),
+              life: 0.7, decay: 0.07,
+              size: Math.random() * 3 + 1,
+              color: '#aaddff'
+            });
+          }
+          break;
+        }
+      }
+    }
+    if (h.y > canvas.height + 10) h.life = 0;
+  }
+  hailPellets = hailPellets.filter(h => h.life > 0);
+}
+
+function drawHailstorm() {
+  if (hailPellets.length === 0) return;
+  ctx.save();
+  ctx.shadowBlur = 5;
+  ctx.shadowColor = '#88ccff';
+  for (const h of hailPellets) {
+    const alpha = h.hit ? 0.3 : 0.9;
+    ctx.fillStyle = `rgba(180,220,255,${alpha})`;
+    ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.7})`;
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.arc(h.x, h.y, h.size * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+disasterTornadoBtn.addEventListener('click', triggerTornado);
+
+disasterVolcanoBtn.addEventListener('click', triggerVolcano);
+
+disasterLightningBtn.addEventListener('click', () => { selectDisaster('lightning'); });
+disasterTsunamiBtn.addEventListener('click',   () => { selectDisaster('tsunami'); });
+disasterEarthquakeBtn.addEventListener('click',() => { selectDisaster('earthquake'); });
+const disasterBlizzardBtn  = document.getElementById('disaster-blizzard');
+const disasterHailstormBtn = document.getElementById('disaster-hailstorm');
+disasterBlizzardBtn.addEventListener('click',  () => { selectDisaster('blizzard'); });
+disasterHailstormBtn.addEventListener('click', () => { selectDisaster('hailstorm'); });
+
+function drawDisasterIcons() {
+  // Lightning icon
+  const lc = disasterLightningBtn.querySelector('canvas').getContext('2d');
+  lc.clearRect(0, 0, 36, 36);
+  lc.strokeStyle = '#cc88ff'; lc.lineWidth = 2; lc.shadowBlur = 8; lc.shadowColor = '#bb44ff';
+  lc.beginPath();
+  lc.moveTo(20, 2); lc.lineTo(10, 18); lc.lineTo(17, 18); lc.lineTo(14, 34); lc.lineTo(26, 16); lc.lineTo(19, 16); lc.lineTo(20, 2);
+  lc.fillStyle = 'rgba(187,68,255,0.3)'; lc.fill(); lc.stroke();
+  lc.shadowBlur = 0;
+
+  // Tsunami icon
+  const tc = disasterTsunamiBtn.querySelector('canvas').getContext('2d');
+  tc.clearRect(0, 0, 36, 36);
+  tc.strokeStyle = '#40c0ff'; tc.lineWidth = 2; tc.shadowBlur = 8; tc.shadowColor = '#40c0ff';
+  tc.beginPath();
+  tc.moveTo(2, 26);
+  for (let x = 2; x <= 34; x += 2) {
+    tc.lineTo(x, 26 - Math.sin((x / 36) * Math.PI * 2.5) * 10);
+  }
+  tc.stroke();
+  tc.beginPath();
+  tc.moveTo(2, 20);
+  for (let x = 2; x <= 34; x += 2) {
+    tc.lineTo(x, 20 - Math.sin((x / 36) * Math.PI * 2 + 1) * 6);
+  }
+  tc.strokeStyle = 'rgba(64,192,255,0.5)';
+  tc.stroke();
+  tc.shadowBlur = 0;
+
+  // Earthquake icon — jagged crack lines
+  const ec = disasterEarthquakeBtn.querySelector('canvas').getContext('2d');
+  ec.clearRect(0, 0, 36, 36);
+  ec.strokeStyle = '#c88030'; ec.lineWidth = 2; ec.shadowBlur = 8; ec.shadowColor = '#c88030';
+  // Ground line
+  ec.beginPath(); ec.moveTo(2, 22); ec.lineTo(34, 22); ec.strokeStyle = 'rgba(200,128,48,0.4)'; ec.stroke();
+  // Main crack
+  ec.strokeStyle = '#e0a040'; ec.lineWidth = 2;
+  ec.beginPath();
+  ec.moveTo(4, 22); ec.lineTo(10, 28); ec.lineTo(16, 16); ec.lineTo(22, 26); ec.lineTo(28, 18); ec.lineTo(33, 22);
+  ec.stroke();
+  // Debris dots
+  ec.fillStyle = '#a07030';
+  [[8,12],[14,10],[22,9],[28,12],[18,8]].forEach(([x,y]) => { ec.beginPath(); ec.arc(x, y, 2, 0, Math.PI*2); ec.fill(); });
+  ec.shadowBlur = 0;
+
+  // Volcano icon — lava pool circle with glow
+  const vc = disasterVolcanoBtn.querySelector('canvas').getContext('2d');
+  vc.clearRect(0, 0, 36, 36);
+  const vg = vc.createRadialGradient(18, 18, 2, 18, 18, 13);
+  vg.addColorStop(0, 'rgba(255,240,80,0.95)');
+  vg.addColorStop(0.4, 'rgba(255,100,0,0.85)');
+  vg.addColorStop(1, 'rgba(120,20,0,0.7)');
+  vc.fillStyle = vg;
+  vc.shadowBlur = 10; vc.shadowColor = '#ff4400';
+  vc.beginPath(); vc.arc(18, 18, 13, 0, Math.PI * 2); vc.fill();
+  vc.strokeStyle = 'rgba(255,180,40,0.8)'; vc.lineWidth = 1.5; vc.stroke();
+  vc.shadowBlur = 0;
+  [[12,14],[18,10],[24,15],[16,22],[22,20]].forEach(([x,y]) => {
+    vc.beginPath(); vc.arc(x, y, 2, 0, Math.PI*2);
+    vc.fillStyle = '#ffee88'; vc.fill();
+  });
+
+  // Tornado icon — stacked ellipses narrowing downward
+  const nc = disasterTornadoBtn.querySelector('canvas').getContext('2d');
+  nc.clearRect(0, 0, 36, 36);
+  nc.shadowBlur = 6; nc.shadowColor = '#aabbff';
+  [[18, 6, 14, 3], [18, 13, 10, 2.5], [18, 19, 7, 2], [18, 25, 4, 1.5], [18, 30, 2, 1]].forEach(([cx, cy, rx, ry], i) => {
+    nc.strokeStyle = `rgba(${160 + i*16},${160 + i*16},220,${0.9 - i*0.1})`;
+    nc.lineWidth = 1.5;
+    nc.beginPath(); nc.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); nc.stroke();
+  });
+  nc.shadowBlur = 0;
+
+  // Meteor icon — falling block with fire trail
+  const mc = disasterMeteorBtn.querySelector('canvas').getContext('2d');
+  mc.clearRect(0, 0, 36, 36);
+  // Trail
+  const mg = mc.createLinearGradient(18, 2, 18, 22);
+  mg.addColorStop(0, 'rgba(255,220,80,0)');
+  mg.addColorStop(1, 'rgba(255,100,0,0.6)');
+  mc.fillStyle = mg;
+  mc.fillRect(14, 2, 8, 20);
+  // Block body
+  mc.shadowBlur = 8; mc.shadowColor = '#ff4400';
+  const bg = mc.createLinearGradient(12, 20, 24, 34);
+  bg.addColorStop(0, '#ffee88');
+  bg.addColorStop(0.4, '#ff7700');
+  bg.addColorStop(1, '#aa2200');
+  mc.fillStyle = bg;
+  mc.beginPath();
+  mc.moveTo(13, 20); mc.lineTo(23, 20); mc.lineTo(21, 34); mc.lineTo(15, 34);
+  mc.closePath(); mc.fill();
+  mc.shadowBlur = 0;
+
+  // Blizzard icon — snowflake
+  const blc = disasterBlizzardBtn.querySelector('canvas').getContext('2d');
+  blc.clearRect(0, 0, 36, 36);
+  blc.strokeStyle = '#88ccff'; blc.lineWidth = 2; blc.shadowBlur = 8; blc.shadowColor = '#aaddff';
+  // 6-arm snowflake
+  for (let arm = 0; arm < 6; arm++) {
+    const angle = (arm / 6) * Math.PI * 2;
+    blc.beginPath();
+    blc.moveTo(18, 18);
+    blc.lineTo(18 + Math.cos(angle) * 13, 18 + Math.sin(angle) * 13);
+    blc.stroke();
+    // Small branches
+    const bx = 18 + Math.cos(angle) * 8, by = 18 + Math.sin(angle) * 8;
+    const ba = angle + Math.PI / 2;
+    blc.beginPath();
+    blc.moveTo(bx - Math.cos(ba) * 4, by - Math.sin(ba) * 4);
+    blc.lineTo(bx + Math.cos(ba) * 4, by + Math.sin(ba) * 4);
+    blc.stroke();
+  }
+  blc.fillStyle = '#aaddff'; blc.beginPath(); blc.arc(18, 18, 2.5, 0, Math.PI * 2); blc.fill();
+  blc.shadowBlur = 0;
+
+  // Black hole icon — dark vortex
+  const bhc = disasterBlackholeBtn.querySelector('canvas').getContext('2d');
+  bhc.clearRect(0, 0, 36, 36);
+  const bhGrad = bhc.createRadialGradient(18, 18, 1, 18, 18, 13);
+  bhGrad.addColorStop(0, 'rgba(0,0,0,1)');
+  bhGrad.addColorStop(0.4, 'rgba(30,0,60,0.85)');
+  bhGrad.addColorStop(1, 'rgba(100,0,160,0)');
+  bhc.fillStyle = bhGrad;
+  bhc.beginPath(); bhc.arc(18, 18, 13, 0, Math.PI * 2); bhc.fill();
+  bhc.shadowBlur = 8; bhc.shadowColor = '#8800ff';
+  bhc.strokeStyle = 'rgba(160,60,255,0.8)'; bhc.lineWidth = 1.5;
+  bhc.beginPath(); bhc.ellipse(18, 18, 13, 5, 0.3, 0, Math.PI * 2); bhc.stroke();
+  bhc.beginPath(); bhc.ellipse(18, 18, 9, 3.5, -0.3, 0, Math.PI * 2); bhc.stroke();
+  bhc.fillStyle = '#cc44ff'; bhc.beginPath(); bhc.arc(18, 18, 3, 0, Math.PI * 2); bhc.fill();
+  bhc.shadowBlur = 0;
+
+  // Hailstorm icon — falling ice pellets
+  const hsc = disasterHailstormBtn.querySelector('canvas').getContext('2d');
+  hsc.clearRect(0, 0, 36, 36);
+  hsc.shadowBlur = 6; hsc.shadowColor = '#88ccff';
+  [[8,6],[18,4],[28,8],[12,16],[22,14],[6,24],[16,22],[26,20],[10,32],[20,30]].forEach(([x,y]) => {
+    const g = hsc.createRadialGradient(x, y, 0, x, y, 4);
+    g.addColorStop(0, '#ffffff');
+    g.addColorStop(1, 'rgba(140,200,255,0.6)');
+    hsc.fillStyle = g;
+    hsc.beginPath(); hsc.arc(x, y, 3.5, 0, Math.PI * 2); hsc.fill();
+  });
+  hsc.shadowBlur = 0;
+}
+
+function towerType(t) {
+  if (t instanceof Flamethrower) return 'flamethrower';
+  if (t instanceof Minigun) return 'minigun';
+  if (t instanceof Crossbow) return 'crossbow';
+  if (t instanceof OmniCannon) return 'omni';
+  if (t instanceof PlasmaTurret) return 'plasma';
+  if (t instanceof LaserTurret) return 'laserturret';
+  if (t instanceof Boomerang) return 'boomerang';
+  if (t instanceof MissileLauncher) return 'missile';
+  if (t instanceof Cannon) return 'cannon';
+  return 'turret';
+}
+
+function saveGame() {
+  const data = {
+    version: 1,
+    lives,
+    credits,
+    currentWave,
+    towers: towers.map(t => ({
+      type: towerType(t),
+      gx: t.gx, gy: t.gy,
+      level: t.level,
+      damage: t.damage,
+      range: t.range,
+      fireRate: t.fireRate,
+      bombCount: t.bombCount !== undefined ? t.bombCount : undefined,
+    })),
+    spikes: spikes.map(s => ({ gx: s.gx, gy: s.gy, level: s.level, damage: s.damage })),
+    muds: muds.map(m => ({ gx: m.gx, gy: m.gy, level: m.level })),
+    laserRods: laserRods.map(r => ({ gx: r.gx, gy: r.gy, level: r.level })),
+    landmines: landmines.map(lm => ({ gx: lm.gx, gy: lm.gy })),
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `nexus-defense-wave${currentWave}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function loadGameData(data) {
+  if (!data || data.version !== 1) { alert('Invalid save file.'); return; }
+  // Stop any running wave
+  waveActive = false;
+  spawnQueue = [];
+  spawnTimer = 0;
+  enemies = [];
+  projectiles = [];
+  particles = [];
+  armyTanks = [];
+  // Restore state
+  lives = data.lives;
+  credits = data.credits;
+  currentWave = data.currentWave;
+  gameOver = false;
+  overlay.classList.remove('visible');
+  // Rebuild towers
+  towers = data.towers.map(d => {
+    let t;
+    if (d.type === 'flamethrower') t = new Flamethrower(d.gx, d.gy);
+    else if (d.type === 'minigun') t = new Minigun(d.gx, d.gy);
+    else if (d.type === 'crossbow') t = new Crossbow(d.gx, d.gy);
+    else if (d.type === 'omni') t = new OmniCannon(d.gx, d.gy);
+    else if (d.type === 'plasma') t = new PlasmaTurret(d.gx, d.gy);
+    else if (d.type === 'laserturret') t = new LaserTurret(d.gx, d.gy);
+    else if (d.type === 'boomerang') t = new Boomerang(d.gx, d.gy);
+    else if (d.type === 'missile') t = new MissileLauncher(d.gx, d.gy);
+    else if (d.type === 'cannon') t = new Cannon(d.gx, d.gy);
+    else t = new Tower(d.gx, d.gy);
+    t.level = d.level;
+    t.damage = d.damage;
+    t.range = d.range;
+    t.fireRate = d.fireRate;
+    if (d.bombCount !== undefined) t.bombCount = d.bombCount;
+    return t;
+  });
+  spikes = data.spikes.map(d => { const s = new Spike(d.gx, d.gy); s.level = d.level; s.damage = d.damage; return s; });
+  muds = data.muds.map(d => { const m = new Mud(d.gx, d.gy); m.level = d.level; return m; });
+  laserRods = data.laserRods.map(d => { const r = new LaserRod(d.gx, d.gy); r.level = d.level; return r; });
+  landmines = data.landmines.map(d => new Landmine(d.gx, d.gy));
+  startBtn.disabled = false;
+  updateHUD();
+  tooltip.textContent = `[ SAVE LOADED — WAVE ${currentWave} — PLACE TURRETS OR LAUNCH WAVE ]`;
+}
+
+const saveBtn = document.getElementById('save-btn');
+const loadBtn = document.getElementById('load-btn');
+const loadFileInput = document.getElementById('load-file-input');
+
+saveBtn.addEventListener('click', saveGame);
+loadBtn.addEventListener('click', () => loadFileInput.click());
+loadFileInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      loadGameData(JSON.parse(ev.target.result));
+    } catch { alert('Failed to read save file.'); }
+  };
+  reader.readAsText(file);
+  loadFileInput.value = '';
+});
 
 startBtn.addEventListener('click', startWave);
 autoBtn.addEventListener('click', () => {
@@ -3796,11 +5192,13 @@ autoBtn.addEventListener('click', () => {
 shopBtn.addEventListener('click', () => {
   toolbar.classList.toggle('open');
   shopBtn.classList.toggle('active', toolbar.classList.contains('open'));
+  // close disaster panel if open
+  if (toolbar.classList.contains('open')) { disasterPanel.classList.remove('open'); disasterBtn.classList.remove('active'); }
 });
 deleteBtn.addEventListener('click', () => setDeleteMode(!deleteMode));
 document.addEventListener('keydown', e => {
   if (e.key === 'Delete' || e.key === 'Backspace') setDeleteMode(!deleteMode);
-  if (e.key === 'Escape') setDeleteMode(false);
+  if (e.key === 'Escape') { setDeleteMode(false); clearDisaster(); pendingVolcano = false; pendingTornado = false; pendingMeteor = false; pendingBlackhole = false; canvas.style.cursor = 'crosshair'; }
 });
 restartBtn.addEventListener('click', () => {
   overlay.classList.remove('visible');
@@ -3818,6 +5216,9 @@ restartBtn.addEventListener('click', () => {
   landmines = [];
   spawnQueue = [];
   spawnTimer = 0;
+  blizzardTimer = 0; blizzardSnowflakes = [];
+  blackholes = []; pendingBlackhole = false;
+  hailstormTimer = 0; hailPellets = [];
 });
 
 window.addEventListener('resize', () => { resize(); buildPathCells(); buildGridCache(); initStars(); });
@@ -4072,6 +5473,7 @@ function drawShopIcons() {
   });
 }
 drawShopIcons();
+drawDisasterIcons();
 </script>
 </body>
 </html>

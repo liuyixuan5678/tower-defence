@@ -259,6 +259,62 @@
   }
   #disaster-panel.open { right: 0; }
 
+  #craft-panel {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    right: -330px; width: 300px; max-height: 90vh; overflow-y: auto;
+    background: var(--panel); border: 1px solid #22aa66; border-right: none;
+    z-index: 50; transition: right 0.25s ease;
+    padding: 14px; font-family: 'Orbitron', monospace;
+  }
+  #craft-panel.open { right: 0; }
+  .craft-title {
+    color: #44ffaa; font-size: 10px; font-weight: 700;
+    letter-spacing: 3px; text-align: center; margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  #craft-place-btn {
+    display: block; width: 100%; margin-bottom: 12px;
+    font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; padding: 10px; background: transparent;
+    color: #44ffaa; border: 1px solid #22aa66; cursor: pointer;
+    text-transform: uppercase; transition: all 0.2s;
+  }
+  #craft-place-btn:disabled { color: #1a4433; border-color: #0a2211; cursor: not-allowed; }
+  #craft-place-btn:not(:disabled):hover { color: #fff; border-color: #ffaa00; box-shadow: 0 0 8px #ffaa0066; }
+
+  #craft-blueprints { display: flex; flex-direction: column; gap: 8px; }
+  .craft-bp {
+    border: 1px solid #1a3322; background: #060d06; padding: 8px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .craft-bp:hover { border-color: #44ffaa66; }
+  .craft-bp.selected {
+    border-color: #ffaa00; background: #140d00; box-shadow: 0 0 8px #ffaa0055;
+  }
+  .craft-recipe-row {
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+  }
+  .craft-plus, .craft-eq { color: #44ffaa; font-size: 18px; font-weight: 700; }
+  .craft-slot {
+    width: 46px; height: 46px;
+    background: #0b150b; border: 2px solid #1a3322;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.15s, box-shadow 0.15s; box-sizing: border-box;
+  }
+  .craft-slot canvas { pointer-events: none; }
+  .craft-slot.available { border-color: #44ffaa; box-shadow: 0 0 5px #44ffaa44; }
+  .craft-slot.missing { border-color: #ff4444; box-shadow: 0 0 5px #ff444444; }
+  .craft-result-slot {
+    width: 50px; height: 50px;
+    background: #140d00; border: 2px solid #ff8800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .craft-bp-label {
+    color: #ffaa44; font-size: 8px; letter-spacing: 1px;
+    text-align: center; margin-top: 6px; text-transform: uppercase;
+  }
+  .craft-bp-cost { color: #44ffaa88; font-size: 8px; letter-spacing: 1px; text-align: center; margin-top: 2px; }
+
   .disaster-btn {
     font-family: 'Orbitron', monospace;
     font-size: 10px;
@@ -307,7 +363,7 @@
     cursor: not-allowed;
   }
 
-  #save-btn, #load-btn {
+  #save-btn {
     font-family: 'Orbitron', monospace;
     font-size: 11px;
     font-weight: 700;
@@ -322,7 +378,7 @@
     overflow: hidden;
     transition: all 0.2s;
   }
-  #save-btn::before, #load-btn::before {
+  #save-btn::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -331,8 +387,8 @@
     transition: transform 0.2s;
     opacity: 0.12;
   }
-  #save-btn:hover::before, #load-btn:hover::before { transform: translateX(0); }
-  #save-btn:hover, #load-btn:hover { box-shadow: 0 0 8px #88aacc, 0 0 20px #88aacc44; color: #aaccee; border-color: #88aacc; }
+  #save-btn:hover::before { transform: translateX(0); }
+  #save-btn:hover { box-shadow: 0 0 8px #88aacc, 0 0 20px #88aacc44; color: #aaccee; border-color: #88aacc; }
 
   #delete-btn {
     font-family: 'Orbitron', monospace;
@@ -363,6 +419,23 @@
   #delete-btn.active {
     background: rgba(255,34,68,0.2);
     box-shadow: 0 0 8px #ff2244, 0 0 20px #ff224444;
+  }
+
+  #merge-btn {
+    font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; padding: 8px 16px; background: transparent;
+    color: #44ffaa; border: 1px solid #22aa66; cursor: pointer;
+    text-transform: uppercase; position: relative; overflow: hidden; transition: all 0.2s;
+  }
+  #merge-btn::before {
+    content: ''; position: absolute; inset: 0; background: #44ffaa;
+    transform: translateX(-100%); transition: transform 0.2s; opacity: 0.12;
+  }
+  #merge-btn:hover::before { transform: translateX(0); }
+  #merge-btn:hover { box-shadow: 0 0 8px #44ffaa, 0 0 20px #44ffaa44; }
+  #merge-btn.active {
+    background: rgba(68,255,170,0.15);
+    box-shadow: 0 0 8px #44ffaa, 0 0 20px #44ffaa44; color: #88ffcc;
   }
 
   #hud-wave-controls {
@@ -740,6 +813,43 @@
   #cover-start-btn:hover {
     background: rgba(0,245,255,0.08); box-shadow: 0 0 35px rgba(0,245,255,0.35);
   }
+  #cover-load-btn {
+    background: transparent; border: 1px solid #336688; color: #88aacc;
+    font-family: 'Orbitron', monospace; font-size: 13px; letter-spacing: 4px;
+    padding: 11px 36px; cursor: pointer; transition: all 0.2s; margin-top: 14px;
+  }
+  #cover-load-btn:hover {
+    color: #aaccee; border-color: #88aacc; box-shadow: 0 0 16px rgba(136,170,204,0.3);
+  }
+  .cover-toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1px solid rgba(0,245,255,0.15); border-radius: 6px;
+    padding: 16px 20px; margin-bottom: 32px;
+    background: rgba(0,245,255,0.02);
+  }
+  .cover-toggle-label { font-size: 13px; color: #aac; letter-spacing: 2px; }
+  .cover-toggle-sub { font-size: 10px; color: #556; letter-spacing: 1px; margin-top: 4px; font-family: 'Share Tech Mono', monospace; }
+  .toggle-switch {
+    position: relative; width: 46px; height: 24px; flex-shrink: 0;
+  }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-track {
+    position: absolute; inset: 0; background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(0,245,255,0.3); border-radius: 12px; cursor: pointer;
+    transition: all 0.25s;
+  }
+  .toggle-track::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: rgba(0,245,255,0.4); transition: all 0.25s;
+  }
+  .toggle-switch input:checked + .toggle-track {
+    background: rgba(0,245,255,0.15); border-color: #00f5ff;
+    box-shadow: 0 0 10px rgba(0,245,255,0.3);
+  }
+  .toggle-switch input:checked + .toggle-track::after {
+    left: 25px; background: #00f5ff; box-shadow: 0 0 6px #00f5ff;
+  }
 </style>
 </head>
 <body>
@@ -759,7 +869,29 @@
         <div class="opt-desc">All bosses have standard stats only.<br>No immunities or special abilities.<br>Recommended for new players.</div>
       </div>
     </div>
+    <div class="cover-toggle-row">
+      <div>
+        <div class="cover-toggle-label">DISASTERS</div>
+        <div class="cover-toggle-sub">Lightning, Tsunami, Void and more — powerful one-time abilities</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="disasters-toggle" checked>
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+    <div class="cover-toggle-row">
+      <div>
+        <div class="cover-toggle-label">TOWER MERGING</div>
+        <div class="cover-toggle-sub">Combine two towers into a powerful merged tower</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="merging-toggle" checked>
+        <span class="toggle-track"></span>
+      </label>
+    </div>
     <button id="cover-start-btn" onclick="startFromCover()">START GAME</button>
+    <br>
+    <button id="cover-load-btn" onclick="document.getElementById('load-file-input').click()">LOAD SAVE</button>
   </div>
 </div>
 
@@ -785,8 +917,8 @@
   <button id="disaster-btn">DISASTER</button>
   <button id="shop-btn">SHOP</button>
   <button id="save-btn">SAVE</button>
-  <button id="load-btn">LOAD</button>
   <input type="file" id="load-file-input" accept=".json" style="display:none">
+  <button id="merge-btn">MERGE</button>
   <button id="delete-btn">DELETE</button>
   <div id="hud-wave-controls">
     <button id="start-btn">LAUNCH WAVE</button>
@@ -805,6 +937,12 @@
   <button class="disaster-btn" id="disaster-blackhole"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>BLACK HOLE</span><span class="tool-cost">700cr · place gravitational pull 10s</span></span></button>
   <button class="disaster-btn" id="disaster-hailstorm"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>HAILSTORM</span><span class="tool-cost">300cr · 8s of falling hail</span></span></button>
   <button class="disaster-btn" id="disaster-void"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>VOID</span><span class="tool-cost">5000cr · place void 2min · 500dmg/frame</span></span></button>
+</div>
+
+<div id="craft-panel">
+  <div class="craft-title">⚒ TOWER MERGING</div>
+  <button id="craft-place-btn" disabled>SELECT</button>
+  <div id="craft-blueprints"></div>
 </div>
 
 <div id="toolbar">
@@ -863,6 +1001,7 @@ const deleteBtn = document.getElementById('delete-btn');
 const toolBtns = document.querySelectorAll('.tool-btn');
 let deleteMode = false;
 let selectedTool = 'turret';
+let pendingMerge = null;
 
 function setDeleteMode(on) {
   deleteMode = on;
@@ -3552,6 +3691,35 @@ canvas.addEventListener('click', e => {
   const gx = Math.floor(wx / CELL);
   const gy = Math.floor(wy / CELL);
   if (gx < 0 || gx >= COLS || gy < 0 || gy >= ROWS) return;
+
+  // Craft placement
+  if (pendingMerge) {
+    const recipe = pendingMerge; // now a recipe object from CRAFT_RECIPES
+    const r = recipe.result;
+    if (towers.find(t => t.gx === gx && t.gy === gy) || laserRods.find(lr => lr.gx === gx && lr.gy === gy)) {
+      tooltip.textContent = '[ CELL OCCUPIED — CHOOSE AN EMPTY CELL ]'; return;
+    }
+    if (pathCells.has(`${gx},${gy}`)) { tooltip.textContent = '[ CANNOT PLACE ON PATH ]'; return; }
+    // Resolve component towers by type id
+    const comps = r.needs.map(id => {
+      const def = CRAFT_TOWER_DEFS.find(d => d.id === id);
+      if (!def) return null;
+      return def.cls === null ? towers.find(t => t.constructor === Tower) : towers.find(t => t instanceof def.cls);
+    });
+    if (comps.some(c => !c)) { tooltip.textContent = '[ COMPONENT TOWERS NO LONGER ON BOARD ]'; pendingMerge = null; mergeBtn.classList.remove('active'); return; }
+    if (credits < r.cost) { tooltip.textContent = '[ NOT ENOUGH CREDITS ]'; return; }
+    credits -= r.cost;
+    for (const comp of comps) towers = towers.filter(t => t !== comp);
+    const merged = r.create(gx, gy);
+    towers.push(merged);
+    updateHUD();
+    spawnExplosion(merged.wx, merged.wy);
+    tooltip.textContent = `[ ${r.label} PLACED ]`;
+    pendingMerge = null;
+    mergeBtn.classList.remove('active');
+    canvas.style.cursor = 'crosshair';
+    return;
+  }
   // Volcano placement mode
   if (pendingVolcano) {
     lavaPools.push({ wx, wy, radius: CELL * 3, life: 3600, maxLife: 3600, dmgTimer: 0 });
@@ -3799,7 +3967,50 @@ canvas.addEventListener('click', e => {
       }
       return;
     }
-    const t = towers.find(t => t instanceof Tower && !(t instanceof Flamethrower) && !(t instanceof Cannon) && !(t instanceof Minigun) && !(t instanceof Crossbow) && !(t instanceof OmniCannon) && !(t instanceof PlasmaTurret) && !(t instanceof LaserTurret) && !(t instanceof Boomerang) && !(t instanceof MissileLauncher) && !(t instanceof Tazor) && !(t instanceof EnergyLauncher) && !(t instanceof SpinningLaserRod) && !(t instanceof Sawblade) && t.gx === gx && t.gy === gy);
+    const rl = towers.find(t => t instanceof RocketLauncher && t.gx === gx && t.gy === gy);
+    if (rl) {
+      const costTable = [3000, 4500, 6000, 8000];
+      if (rl.level < 5) {
+        const upgCost = costTable[rl.level - 1];
+        if (credits >= upgCost) {
+          credits -= upgCost;
+          rl.level++;
+          rl.damage = Math.round(15000 * Math.pow(1.3, rl.level - 1));
+          updateHUD();
+        }
+      }
+      return;
+    }
+    const db = towers.find(t => t instanceof DoubleBoomerang && t.gx === gx && t.gy === gy);
+    if (db) {
+      const costTable = [800, 1200, 1800, 2600];
+      if (db.level < 5) {
+        const upgCost = costTable[db.level - 1];
+        if (credits >= upgCost) {
+          credits -= upgCost;
+          db.level++;
+          db.damage = Math.round(500 * Math.pow(1.35, db.level - 1));
+          db.range = CELL * (9 + db.level);
+          updateHUD();
+        }
+      }
+      return;
+    }
+    const mergedT = towers.find(t => t.gx === gx && t.gy === gy && _mergedUpgradeInfo(t));
+    if (mergedT) {
+      const info = _mergedUpgradeInfo(mergedT);
+      if (mergedT.level < 5) {
+        const upgCost = info.costs[mergedT.level - 1];
+        if (credits >= upgCost) {
+          credits -= upgCost;
+          mergedT.level++;
+          mergedT.damage = Math.round(info.base * Math.pow(info.mult, mergedT.level - 1));
+          updateHUD();
+        }
+      }
+      return;
+    }
+    const t = towers.find(t => t instanceof Tower && !(t instanceof Flamethrower) && !(t instanceof Cannon) && !(t instanceof Minigun) && !(t instanceof Crossbow) && !(t instanceof OmniCannon) && !(t instanceof PlasmaTurret) && !(t instanceof LaserTurret) && !(t instanceof Boomerang) && !(t instanceof MissileLauncher) && !(t instanceof Tazor) && !(t instanceof EnergyLauncher) && !(t instanceof SpinningLaserRod) && !(t instanceof Sawblade) && !(t instanceof RocketLauncher) && !(t instanceof DoubleBoomerang) && !_mergedUpgradeInfo(t) && t.gx === gx && t.gy === gy);
     if (t) {
       const dmgTable = [15, 30, 60, 100, 300];
       const costTable = [100, 200, 300, 600];
@@ -3897,6 +4108,7 @@ canvas.addEventListener('click', e => {
     }
     return;
   }
+  if (pendingMerge) return; // handled above
   if (selectedTool !== 'turret' && selectedTool !== 'flamethrower' && selectedTool !== 'cannon' && selectedTool !== 'laser' && selectedTool !== 'minigun' && selectedTool !== 'crossbow' && selectedTool !== 'omni' && selectedTool !== 'plasma' && selectedTool !== 'laserturret' && selectedTool !== 'boomerang' && selectedTool !== 'missile' && selectedTool !== 'tazor' && selectedTool !== 'energylauncher' && selectedTool !== 'spinlaser' && selectedTool !== 'sawblade') return;
   if (selectedTool === 'laser') {
     if (laserRods.find(r => r.gx === gx && r.gy === gy)) return;
@@ -4170,7 +4382,61 @@ function drawHoverCell() {
       }
       return;
     }
-    if (!deleteMode && occupiedTower instanceof Tower && !(occupiedTower instanceof Flamethrower) && !(occupiedTower instanceof Cannon) && !(occupiedTower instanceof Minigun) && !(occupiedTower instanceof Crossbow) && !(occupiedTower instanceof OmniCannon) && !(occupiedTower instanceof PlasmaTurret) && !(occupiedTower instanceof Tazor) && !(occupiedTower instanceof EnergyLauncher) && !(occupiedTower instanceof SpinningLaserRod) && !(occupiedTower instanceof Sawblade)) {
+    if (!deleteMode && occupiedTower instanceof RocketLauncher) {
+      const lvl = occupiedTower.level || 1;
+      const costTable = [3000, 4500, 6000, 8000];
+      if (lvl < 5) {
+        const upgCost = costTable[lvl - 1];
+        const canAfford = credits >= upgCost;
+        const nextDmg = Math.round(15000 * Math.pow(1.3, lvl));
+        ctx.strokeStyle = canAfford ? '#ff6600' : 'rgba(255,34,68,0.5)';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(gx * CELL + 1, gy * CELL + 1, CELL - 2, CELL - 2);
+        ctx.font = `bold ${Math.round(CELL * 0.28)}px monospace`;
+        ctx.textAlign = 'center';
+        ctx.fillStyle = canAfford ? '#ff9933' : '#ff2244';
+        ctx.fillText(`★${lvl + 1} ${nextDmg}dmg -${upgCost}cr`, gx * CELL + CELL / 2, gy * CELL + CELL * 0.85);
+        ctx.textAlign = 'left';
+      }
+      return;
+    }
+    if (!deleteMode && occupiedTower instanceof DoubleBoomerang) {
+      const lvl = occupiedTower.level || 1;
+      const costTable = [800, 1200, 1800, 2600];
+      if (lvl < 5) {
+        const upgCost = costTable[lvl - 1];
+        const canAfford = credits >= upgCost;
+        const nextDmg = Math.round(500 * Math.pow(1.35, lvl));
+        ctx.strokeStyle = canAfford ? '#66ddff' : 'rgba(255,34,68,0.5)';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(gx * CELL + 1, gy * CELL + 1, CELL - 2, CELL - 2);
+        ctx.font = `bold ${Math.round(CELL * 0.28)}px monospace`;
+        ctx.textAlign = 'center';
+        ctx.fillStyle = canAfford ? '#aaffee' : '#ff2244';
+        ctx.fillText(`★${lvl + 1} ${nextDmg}dmg -${upgCost}cr`, gx * CELL + CELL / 2, gy * CELL + CELL * 0.85);
+        ctx.textAlign = 'left';
+      }
+      return;
+    }
+    if (!deleteMode && occupiedTower && _mergedUpgradeInfo(occupiedTower)) {
+      const info = _mergedUpgradeInfo(occupiedTower);
+      const lvl = occupiedTower.level || 1;
+      if (lvl < 5) {
+        const upgCost = info.costs[lvl - 1];
+        const canAfford = credits >= upgCost;
+        const nextDmg = Math.round(info.base * Math.pow(info.mult, lvl));
+        ctx.strokeStyle = canAfford ? info.color : 'rgba(255,34,68,0.5)';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(gx * CELL + 1, gy * CELL + 1, CELL - 2, CELL - 2);
+        ctx.font = `bold ${Math.round(CELL * 0.28)}px monospace`;
+        ctx.textAlign = 'center';
+        ctx.fillStyle = canAfford ? info.color : '#ff2244';
+        ctx.fillText(`★${lvl + 1} ${nextDmg}dmg -${upgCost}cr`, gx * CELL + CELL / 2, gy * CELL + CELL * 0.85);
+        ctx.textAlign = 'left';
+      }
+      return;
+    }
+    if (!deleteMode && occupiedTower instanceof Tower && !(occupiedTower instanceof Flamethrower) && !(occupiedTower instanceof Cannon) && !(occupiedTower instanceof Minigun) && !(occupiedTower instanceof Crossbow) && !(occupiedTower instanceof OmniCannon) && !(occupiedTower instanceof PlasmaTurret) && !(occupiedTower instanceof Tazor) && !(occupiedTower instanceof EnergyLauncher) && !(occupiedTower instanceof SpinningLaserRod) && !(occupiedTower instanceof Sawblade) && !(occupiedTower instanceof RocketLauncher) && !(occupiedTower instanceof DoubleBoomerang) && !_mergedUpgradeInfo(occupiedTower)) {
       const lvl = occupiedTower.level || 1;
       const costTable = [100, 200, 300, 600];
       if (lvl < 5) {
@@ -4488,8 +4754,6 @@ function loop(ts) {
   for (const r of laserRods) r.draw();
   updateLasers(); // draws beams + applies damage
   for (const t of towers) t.draw();
-  for (const s of spikes) s.draw();
-  for (const tank of armyTanks) tank.draw();
   for (const e of enemies) e.draw();
   for (const p of projectiles) p.draw();
   drawTsunami();
@@ -5856,10 +6120,16 @@ function towerType(t) {
   if (t instanceof OmniCannon) return 'omni';
   if (t instanceof PlasmaTurret) return 'plasma';
   if (t instanceof LaserTurret) return 'laserturret';
+  if (t instanceof DoubleBoomerang) return 'doubleboomerang';
+  if (t instanceof FlameCannon) return 'flamecannon';
+  if (t instanceof StormCaller) return 'stormcaller';
+  if (t instanceof GatlingSawmill) return 'gatlingsawmill';
+  if (t instanceof ExtremeTurret) return 'extremeturret';
   if (t instanceof Boomerang) return 'boomerang';
   if (t instanceof MissileLauncher) return 'missile';
   if (t instanceof Tazor) return 'tazor';
   if (t instanceof EnergyLauncher) return 'energylauncher';
+  if (t instanceof RocketLauncher) return 'rocketlauncher';
   if (t instanceof SpinningLaserRod) return 'spinlaser';
   if (t instanceof Sawblade) return 'sawblade';
   if (t instanceof Cannon) return 'cannon';
@@ -5923,6 +6193,12 @@ function loadGameData(data) {
     else if (d.type === 'missile') t = new MissileLauncher(d.gx, d.gy);
     else if (d.type === 'tazor') t = new Tazor(d.gx, d.gy);
     else if (d.type === 'energylauncher') t = new EnergyLauncher(d.gx, d.gy);
+    else if (d.type === 'rocketlauncher') t = new RocketLauncher(d.gx, d.gy);
+    else if (d.type === 'doubleboomerang') t = new DoubleBoomerang(d.gx, d.gy);
+    else if (d.type === 'flamecannon') t = new FlameCannon(d.gx, d.gy);
+    else if (d.type === 'stormcaller') t = new StormCaller(d.gx, d.gy);
+    else if (d.type === 'gatlingsawmill') t = new GatlingSawmill(d.gx, d.gy);
+    else if (d.type === 'extremeturret') t = new ExtremeTurret(d.gx, d.gy);
     else if (d.type === 'spinlaser') t = new SpinningLaserRod(d.gx, d.gy);
     else if (d.type === 'sawblade') t = new Sawblade(d.gx, d.gy);
     else if (d.type === 'cannon') t = new Cannon(d.gx, d.gy);
@@ -5944,11 +6220,9 @@ function loadGameData(data) {
 }
 
 const saveBtn = document.getElementById('save-btn');
-const loadBtn = document.getElementById('load-btn');
 const loadFileInput = document.getElementById('load-file-input');
 
 saveBtn.addEventListener('click', saveGame);
-loadBtn.addEventListener('click', () => loadFileInput.click());
 loadFileInput.addEventListener('change', e => {
   const file = e.target.files[0];
   if (!file) return;
@@ -5956,6 +6230,18 @@ loadFileInput.addEventListener('change', e => {
   reader.onload = ev => {
     try {
       loadGameData(JSON.parse(ev.target.result));
+      const cover = document.getElementById('cover-page');
+      if (cover.style.display !== 'none') {
+        disastersEnabled = document.getElementById('disasters-toggle').checked;
+        mergingEnabled = document.getElementById('merging-toggle').checked;
+        if (!disastersEnabled) {
+          document.getElementById('disaster-btn').style.display = 'none';
+          document.getElementById('disaster-panel').style.display = 'none';
+        }
+        if (mergingEnabled) document.getElementById('merge-btn').style.display = '';
+        cover.style.display = 'none';
+        requestAnimationFrame(loop);
+      }
     } catch { alert('Failed to read save file.'); }
   };
   reader.readAsText(file);
@@ -5976,9 +6262,10 @@ shopBtn.addEventListener('click', () => {
   if (toolbar.classList.contains('open')) { disasterPanel.classList.remove('open'); disasterBtn.classList.remove('active'); }
 });
 deleteBtn.addEventListener('click', () => setDeleteMode(!deleteMode));
+
 document.addEventListener('keydown', e => {
   if (e.key === 'Delete' || e.key === 'Backspace') setDeleteMode(!deleteMode);
-  if (e.key === 'Escape') { setDeleteMode(false); clearDisaster(); pendingVolcano = false; pendingTornado = false; pendingMeteor = false; pendingBlackhole = false; pendingVoid = false; canvas.style.cursor = 'crosshair'; }
+  if (e.key === 'Escape') { setDeleteMode(false); pendingMerge = null; mergeBtn.classList.remove('active'); craftPanel.classList.remove('open'); clearDisaster(); pendingVolcano = false; pendingTornado = false; pendingMeteor = false; pendingBlackhole = false; pendingVoid = false; canvas.style.cursor = 'crosshair'; }
 });
 restartBtn.addEventListener('click', () => {
   overlay.classList.remove('visible');
@@ -6010,13 +6297,24 @@ buildPathCells();
 buildGridCache();
 initGame();
 
-let bossMode = 'full'; // 'full' = boss powers enabled, 'classic' = no special powers
+let bossMode = 'full';
+let disastersEnabled = true;
+let mergingEnabled = true;
 function selectBossMode(mode) {
   bossMode = mode;
   document.getElementById('opt-enhanced').classList.toggle('selected', mode === 'full');
   document.getElementById('opt-classic').classList.toggle('selected', mode === 'classic');
 }
 function startFromCover() {
+  disastersEnabled = document.getElementById('disasters-toggle').checked;
+  mergingEnabled = document.getElementById('merging-toggle').checked;
+  if (!disastersEnabled) {
+    document.getElementById('disaster-btn').style.display = 'none';
+    document.getElementById('disaster-panel').style.display = 'none';
+  }
+  if (!mergingEnabled) {
+    document.getElementById('merge-btn').style.display = 'none';
+  }
   document.getElementById('cover-page').style.display = 'none';
   requestAnimationFrame(loop);
 }
@@ -6292,6 +6590,365 @@ class EnergyLauncher extends Tower {
   }
 }
 
+// ---- ROCKET LAUNCHER (merged: Super Turret + Missile Launcher) ----
+class RocketLauncher extends Tower {
+  constructor(gx, gy) {
+    super(gx, gy);
+    this.range = 99999;      // board-wide targeting
+    this.damage = 15000;
+    this.fireRate = 60;      // 1 second reload
+    this.blastRadius = CELL * 2.5;
+  }
+
+  fire(target) {
+    projectiles.push(new Missile(this.wx, this.wy, target, this.damage, this.blastRadius));
+    this.shootT = 10;
+  }
+
+  draw() {
+    this.pulseT += 0.04;
+    const pulse = Math.sin(this.pulseT) * 0.06 + 1;
+    const s = CELL * 0.44 * pulse;
+
+    ctx.save();
+    ctx.translate(this.wx, this.wy);
+
+    // Outer glow ring
+    ctx.beginPath();
+    ctx.arc(0, 0, s * 1.35, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,100,0,0.07)';
+    ctx.fill();
+
+    // Octagon body (like Super Turret but orange)
+    ctx.beginPath();
+    for (let i = 0; i < 8; i++) {
+      const a = (Math.PI / 4) * i - Math.PI / 8;
+      i === 0 ? ctx.moveTo(Math.cos(a)*s, Math.sin(a)*s) : ctx.lineTo(Math.cos(a)*s, Math.sin(a)*s);
+    }
+    ctx.closePath();
+    ctx.fillStyle = '#1a0800';
+    ctx.shadowBlur = 18;
+    ctx.shadowColor = '#ff6600';
+    ctx.fill();
+    ctx.strokeStyle = '#ff6600';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Inner ring
+    ctx.beginPath();
+    ctx.arc(0, 0, s * 0.45, 0, Math.PI * 2);
+    ctx.strokeStyle = '#ffaa00';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Barrel aimed at target
+    ctx.rotate(this.angle);
+    if (this.shootT > 0) { ctx.shadowBlur = 18; ctx.shadowColor = '#ff6600'; }
+    ctx.fillStyle = '#ffaa44';
+    ctx.fillRect(s * 0.3, -s * 0.18, s * 1.0, s * 0.36);
+    // Exhaust flame
+    if (this.shootT > 0) {
+      ctx.fillStyle = '#ffdd00';
+      ctx.beginPath();
+      ctx.moveTo(s * 0.3, -s * 0.18);
+      ctx.lineTo(s * 0.3 - s * (0.3 + Math.random() * 0.2), 0);
+      ctx.lineTo(s * 0.3, s * 0.18);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+    ctx.restore();
+
+    // ROCKET LAUNCHER label
+    if (this.level === 1) {
+      ctx.font = `bold ${CELL * 0.18}px "Orbitron", monospace`;
+      ctx.fillStyle = '#ff9933';
+      ctx.textAlign = 'center';
+      ctx.fillText('ROCKET', this.wx, this.wy + s + 9);
+      ctx.textAlign = 'left';
+    } else {
+      ctx.font = `bold ${CELL * 0.22}px "Orbitron", monospace`;
+      ctx.fillStyle = '#ff9933';
+      ctx.textAlign = 'center';
+      ctx.fillText(`L${this.level}`, this.wx, this.wy + s + 10);
+      ctx.textAlign = 'left';
+    }
+  }
+}
+
+// ---- DOUBLE BOOMERANG (merged: Boomerang + Sawblade) ----
+// Fires TWO boomerangs per shot in a spread, each hitting on the way out and back.
+class DoubleBoomerang extends Tower {
+  constructor(gx, gy) {
+    super(gx, gy);
+    this.range = CELL * 9;
+    this.damage = 500;
+    this.fireRate = 40;
+  }
+
+  fire(target) {
+    const dx = target.wx - this.wx, dy = target.wy - this.wy;
+    const baseAng = Math.atan2(dy, dx);
+    const spread = 0.35;
+    for (const off of [-spread, spread]) {
+      const a = baseAng + off;
+      projectiles.push(new BoomerangProjectile(this, Math.cos(a), Math.sin(a), this.range, this.damage));
+    }
+    this.shootT = 6;
+  }
+
+  draw() {
+    const pulse = Math.sin(this.pulseT) * 0.05 + 1;
+    const lvl = this.level || 1;
+    const baseColor = lvl >= 4 ? '#ffffff' : lvl >= 3 ? '#ffe066' : lvl >= 2 ? '#aaffee' : '#66ddff';
+
+    if (!this.target) {
+      ctx.beginPath();
+      ctx.arc(this.wx, this.wy, this.range, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(102,221,255,0.05)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    ctx.save();
+    ctx.translate(this.wx, this.wy);
+    const s = CELL * (0.42 + lvl * 0.06) * pulse;
+
+    // Hex base
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const a = (Math.PI / 3) * i - Math.PI / 6;
+      const r = s * 1.15;
+      i === 0 ? ctx.moveTo(Math.cos(a)*r, Math.sin(a)*r) : ctx.lineTo(Math.cos(a)*r, Math.sin(a)*r);
+    }
+    ctx.closePath();
+    ctx.fillStyle = '#04141a';
+    ctx.fill();
+    ctx.strokeStyle = baseColor;
+    ctx.lineWidth = lvl >= 2 ? 2.5 : 2;
+    ctx.stroke();
+
+    // Two counter-rotating boomerang glyphs
+    if (this.shootT > 0) { ctx.shadowBlur = 16; ctx.shadowColor = baseColor; }
+    ctx.strokeStyle = this.shootT > 0 ? '#ffffff' : baseColor;
+    ctx.lineWidth = 2.5;
+    for (let g = 0; g < 2; g++) {
+      ctx.save();
+      ctx.rotate((g === 0 ? 1 : -1) * this.pulseT * 1.5 + g * Math.PI / 2);
+      ctx.translate(g === 0 ? -s * 0.28 : s * 0.28, 0);
+      for (let k = 0; k < 2; k++) {
+        ctx.beginPath();
+        ctx.arc(0, 0, s * 0.42, k * Math.PI + 0.4, k * Math.PI + Math.PI - 0.4);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+    ctx.shadowBlur = 0;
+    ctx.restore();
+
+    if (lvl >= 2) {
+      ctx.font = `bold ${Math.round(CELL * 0.3)}px monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = baseColor;
+      ctx.fillText('★'.repeat(Math.min(lvl - 1, 4)), this.wx, this.wy - CELL * 0.62);
+      ctx.textAlign = 'left';
+    }
+  }
+}
+
+// ---- FLAME CANNON (merged: Flamethrower + Cannon) ----
+// Lobs explosive fireballs with a large blast radius, moderately fast.
+class FlameCannon extends Tower {
+  constructor(gx, gy) {
+    super(gx, gy);
+    this.range = CELL * 6;
+    this.damage = 2500;
+    this.fireRate = 45;
+    this.blastRadius = CELL * 2.2;
+  }
+  fire(target) {
+    projectiles.push(new Missile(this.wx, this.wy, target, this.damage, this.blastRadius));
+    this.shootT = 10;
+  }
+  draw() {
+    const pulse = Math.sin(this.pulseT) * 0.05 + 1;
+    const lvl = this.level || 1;
+    if (!this.target) {
+      ctx.beginPath(); ctx.arc(this.wx, this.wy, this.range, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,120,0,0.05)'; ctx.lineWidth = 1; ctx.stroke();
+    }
+    ctx.save(); ctx.translate(this.wx, this.wy);
+    const s = CELL * (0.42 + lvl * 0.06) * pulse;
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) { const a = (Math.PI/3)*i - Math.PI/6; const r = s*1.15; i===0?ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r):ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r); }
+    ctx.closePath(); ctx.fillStyle = '#1a0800'; ctx.fill();
+    ctx.strokeStyle = '#ff8800'; ctx.lineWidth = lvl >= 2 ? 2.5 : 2; ctx.stroke();
+    ctx.rotate(this.angle);
+    if (this.shootT > 0) { ctx.shadowBlur = 18; ctx.shadowColor = '#ff6600'; }
+    ctx.fillStyle = this.shootT > 0 ? '#ffdd44' : '#ff8800';
+    ctx.fillRect(0, -s*0.28, s*1.3, s*0.56);
+    ctx.beginPath(); ctx.arc(s*1.3, 0, s*0.34, 0, Math.PI*2); ctx.fillStyle = '#ffaa33'; ctx.fill();
+    ctx.shadowBlur = 0; ctx.restore();
+    if (lvl >= 2) { ctx.font = `bold ${Math.round(CELL*0.3)}px monospace`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle='#ffaa44'; ctx.fillText('★'.repeat(Math.min(lvl-1,4)), this.wx, this.wy-CELL*0.62); ctx.textAlign='left'; }
+  }
+}
+
+// ---- STORM CALLER (merged: Tazor + Energy Launcher) ----
+// Board-reaching chain lightning: zaps the nearest enemies each frame, arcing
+// from one to the next. Direct HP damage bypasses all immunities.
+class StormCaller extends Tower {
+  constructor(gx, gy) {
+    super(gx, gy);
+    this.range = CELL * 10;
+    this.damage = 800;
+    this.arcChain = [];
+  }
+  update() {
+    this.pulseT += 0.04;
+    this.arcChain = [];
+    const inRange = [];
+    for (const e of enemies) {
+      if (e.dead || e.reached) continue;
+      const dx = e.wx - this.wx, dy = e.wy - this.wy;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d <= this.range) inRange.push({ e, d });
+    }
+    inRange.sort((a, b) => a.d - b.d);
+    const maxChain = 4 + (this.level || 1);
+    let px = this.wx, py = this.wy, hit = 0;
+    for (const { e } of inRange) {
+      if (hit >= maxChain) break;
+      e.hp -= this.damage;
+      if (e.hp <= 0) { e.dead = true; spawnExplosion(e.wx, e.wy); credits += enemyReward(e); updateHUD(); }
+      this.arcChain.push({ x1: px, y1: py, x2: e.wx, y2: e.wy });
+      px = e.wx; py = e.wy; hit++;
+    }
+    this.target = hit > 0 ? true : null;
+  }
+  draw() {
+    this.pulseT += 0.04;
+    const pulse = Math.sin(this.pulseT) * 0.08 + 1;
+    const s = CELL * 0.42 * pulse;
+    if (!this.target) {
+      ctx.beginPath(); ctx.arc(this.wx, this.wy, this.range, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(80,180,255,0.05)'; ctx.lineWidth = 1; ctx.stroke();
+    }
+    ctx.save(); ctx.translate(this.wx, this.wy);
+    ctx.beginPath(); ctx.arc(0, 0, s*1.3, 0, Math.PI*2); ctx.fillStyle = 'rgba(80,180,255,0.08)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(0, 0, s, 0, Math.PI*2);
+    ctx.fillStyle = '#001522'; ctx.shadowBlur = 18; ctx.shadowColor = '#33ccff'; ctx.fill();
+    ctx.strokeStyle = '#33ccff'; ctx.lineWidth = 2; ctx.stroke(); ctx.shadowBlur = 0;
+    for (let i = 0; i < 4; i++) {
+      const a = (Math.PI/2)*i + this.pulseT*1.4;
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(a)*s*0.8, Math.sin(a)*s*0.8);
+      ctx.strokeStyle = '#aaddff'; ctx.lineWidth = 1.5; ctx.stroke();
+    }
+    ctx.restore();
+    if ((this.level||1) > 1) { ctx.font=`bold ${CELL*0.22}px "Orbitron",monospace`; ctx.fillStyle='#33ccff'; ctx.textAlign='center'; ctx.fillText(`L${this.level}`, this.wx, this.wy+s+10); ctx.textAlign='left'; }
+    if (this.arcChain.length > 0) {
+      ctx.save();
+      for (const seg of this.arcChain) {
+        ctx.beginPath(); ctx.moveTo(seg.x1, seg.y1);
+        const steps = 6;
+        for (let i = 1; i < steps; i++) { const t = i/steps; const mx = seg.x1+(seg.x2-seg.x1)*t+(Math.random()-0.5)*CELL*0.6; const my = seg.y1+(seg.y2-seg.y1)*t+(Math.random()-0.5)*CELL*0.6; ctx.lineTo(mx, my); }
+        ctx.lineTo(seg.x2, seg.y2);
+        ctx.strokeStyle = 'rgba(100,200,255,0.5)'; ctx.lineWidth = 4; ctx.shadowBlur = 10; ctx.shadowColor = '#33ccff'; ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 1.5; ctx.stroke();
+      }
+      ctx.shadowBlur = 0; ctx.restore();
+    }
+  }
+}
+
+// ---- GATLING SAWMILL (merged: Minigun + Sawblade) ----
+// Rapid-fires piercing sawblade bullets from a spinning toothed barrel.
+class GatlingSawmill extends Tower {
+  constructor(gx, gy) {
+    super(gx, gy);
+    this.range = CELL * 6;
+    this.damage = 300;
+    this.fireRate = 5;
+    this.barrelSpin = 0;
+  }
+  fire(target) {
+    const p = new Projectile(this.wx, this.wy, target);
+    p.damage = this.damage; p.color = '#ffcc00'; p.size = 5;
+    projectiles.push(p);
+    this.shootT = 4;
+    this.barrelSpin += 0.6;
+  }
+  draw() {
+    const pulse = Math.sin(this.pulseT) * 0.05 + 1;
+    const lvl = this.level || 1;
+    if (!this.target) { ctx.beginPath(); ctx.arc(this.wx, this.wy, this.range, 0, Math.PI*2); ctx.strokeStyle='rgba(255,180,0,0.05)'; ctx.lineWidth=1; ctx.stroke(); }
+    ctx.save(); ctx.translate(this.wx, this.wy);
+    const s = CELL * (0.42 + lvl * 0.06) * pulse;
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) { const a = (Math.PI/3)*i - Math.PI/6; const r = s*1.15; i===0?ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r):ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r); }
+    ctx.closePath(); ctx.fillStyle = '#1a1200'; ctx.fill();
+    ctx.strokeStyle = '#ffaa00'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.rotate(this.barrelSpin);
+    if (this.shootT > 0) { ctx.shadowBlur = 12; ctx.shadowColor = '#ffcc00'; }
+    const teeth = 10, ro = s*0.7, ri = s*0.5;
+    ctx.beginPath();
+    for (let i = 0; i < teeth*2; i++) { const a = (Math.PI/teeth)*i; const r = i%2===0?ro:ri; i===0?ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r):ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r); }
+    ctx.closePath(); ctx.fillStyle = '#332200'; ctx.fill();
+    ctx.strokeStyle = this.shootT > 0 ? '#ffffff' : '#ffcc00'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 0, s*0.2, 0, Math.PI*2); ctx.fillStyle = '#ffcc00'; ctx.fill();
+    ctx.shadowBlur = 0; ctx.restore();
+    if (lvl >= 2) { ctx.font = `bold ${Math.round(CELL*0.3)}px monospace`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle='#ffcc00'; ctx.fillText('★'.repeat(Math.min(lvl-1,4)), this.wx, this.wy-CELL*0.62); ctx.textAlign='left'; }
+  }
+}
+
+// ---- EXTREME TURRET (merged: Crossbow + Minigun + Super Turret) ----
+// Board-wide range, extreme fire rate, triple-barrel. The ultimate turret.
+class ExtremeTurret extends Tower {
+  constructor(gx, gy) {
+    super(gx, gy);
+    this.range = 99999;
+    this.damage = 1200;
+    this.fireRate = 6;
+  }
+  fire(target) {
+    const p = new Projectile(this.wx, this.wy, target);
+    p.damage = this.damage; p.color = '#ffd700'; p.size = 4; p.speed = 16;
+    const dx = target.wx - this.wx, dy = target.wy - this.wy; const d = Math.sqrt(dx*dx+dy*dy) || 1;
+    p.vx = (dx/d)*p.speed; p.vy = (dy/d)*p.speed;
+    projectiles.push(p);
+    this.shootT = 4;
+  }
+  draw() {
+    const pulse = Math.sin(this.pulseT) * 0.05 + 1;
+    const lvl = this.level || 1;
+    ctx.save(); ctx.translate(this.wx, this.wy);
+    const s = CELL * (0.46 + lvl * 0.05) * pulse;
+    ctx.beginPath();
+    for (let i = 0; i < 8; i++) { const a = (Math.PI/4)*i - Math.PI/8; const r = s*1.2; i===0?ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r):ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r); }
+    ctx.closePath(); ctx.fillStyle = '#1a1400'; ctx.shadowBlur = 12; ctx.shadowColor = '#ffd700'; ctx.fill();
+    ctx.strokeStyle = '#ffd700'; ctx.lineWidth = 2.5; ctx.stroke(); ctx.shadowBlur = 0;
+    ctx.beginPath(); ctx.arc(0, 0, s*0.55, 0, Math.PI*2); ctx.strokeStyle = '#ffe680'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.rotate(this.angle);
+    if (this.shootT > 0) { ctx.shadowBlur = 18; ctx.shadowColor = '#ffd700'; }
+    ctx.fillStyle = this.shootT > 0 ? '#ffffff' : '#ffd700';
+    ctx.fillRect(0, -s*0.5, s*1.5, 4);
+    ctx.fillRect(0, -2, s*1.6, 4);
+    ctx.fillRect(0, s*0.5 - 4, s*1.5, 4);
+    ctx.shadowBlur = 0; ctx.restore();
+    if (lvl >= 2) { ctx.font = `bold ${Math.round(CELL*0.3)}px monospace`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle='#ffd700'; ctx.fillText('★'.repeat(Math.min(lvl-1,4)), this.wx, this.wy-CELL*0.66); ctx.textAlign='left'; }
+  }
+}
+
+// Upgrade config for merged towers (shared by click-to-upgrade and hover UI)
+function _mergedUpgradeInfo(t) {
+  if (t instanceof FlameCannon)    return { costs:[1200,1800,2600,3600],  base:2500, mult:1.3, color:'#ff8800' };
+  if (t instanceof StormCaller)    return { costs:[3000,4500,6500,9000],  base:800,  mult:1.3, color:'#33ccff' };
+  if (t instanceof GatlingSawmill) return { costs:[1000,1600,2400,3400],  base:300,  mult:1.3, color:'#ffcc00' };
+  if (t instanceof ExtremeTurret)  return { costs:[3500,5500,8000,12000], base:1200, mult:1.3, color:'#ffd700' };
+  return null;
+}
+
 // ---- SAWBLADE ----
 class Sawblade extends Tower {
   constructor(gx, gy) {
@@ -6548,6 +7205,280 @@ class SpinningLaserRod extends Tower {
     }
   }
 }
+
+// ---- CRAFTING TABLE ----
+const mergeBtn = document.getElementById('merge-btn');
+const craftPanel = document.getElementById('craft-panel');
+
+// Tower types available in the picker, with their class for board-checking
+const CRAFT_TOWER_DEFS = [
+  { id: 'turret',        label: 'TURRET',   cls: null },
+  { id: 'flamethrower',  label: 'FLAME',    cls: Flamethrower },
+  { id: 'cannon',        label: 'CANNON',   cls: Cannon },
+  { id: 'minigun',       label: 'MINIGUN',  cls: Minigun },
+  { id: 'crossbow',      label: 'XBOW',     cls: Crossbow },
+  { id: 'boomerang',     label: 'BOOM',     cls: Boomerang },
+  { id: 'laserturret',   label: 'L.TURRET', cls: LaserTurret },
+  { id: 'omni',          label: 'SUPER',    cls: OmniCannon },
+  { id: 'missile',       label: 'MISSILE',  cls: MissileLauncher },
+  { id: 'tazor',         label: 'TAZOR',    cls: Tazor },
+  { id: 'energylauncher',label: 'ENERGY',   cls: EnergyLauncher },
+  { id: 'spinlaser',     label: 'SPINLASER',cls: SpinningLaserRod },
+  { id: 'sawblade',      label: 'SAW',      cls: Sawblade },
+];
+
+// Recipes: pattern is 9-element array (null = must be empty)
+const CRAFT_RECIPES = [
+  {
+    pattern: ['omni', 'missile', null, null, null, null, null, null, null],
+    result: {
+      id: 'rocketlauncher', label: 'ROCKET LAUNCHER', cost: 7500,
+      needs: ['omni', 'missile'],
+      create: (gx, gy) => new RocketLauncher(gx, gy)
+    }
+  },
+  {
+    pattern: ['boomerang', 'sawblade', null, null, null, null, null, null, null],
+    result: {
+      id: 'doubleboomerang', label: 'DOUBLE BOOMERANG', cost: 3000,
+      needs: ['boomerang', 'sawblade'],
+      create: (gx, gy) => new DoubleBoomerang(gx, gy)
+    }
+  },
+  {
+    pattern: ['flamethrower', 'cannon'],
+    result: {
+      id: 'flamecannon', label: 'FLAME CANNON', cost: 2000,
+      needs: ['flamethrower', 'cannon'],
+      create: (gx, gy) => new FlameCannon(gx, gy)
+    }
+  },
+  {
+    pattern: ['tazor', 'energylauncher'],
+    result: {
+      id: 'stormcaller', label: 'STORM CALLER', cost: 8000,
+      needs: ['tazor', 'energylauncher'],
+      create: (gx, gy) => new StormCaller(gx, gy)
+    }
+  },
+  {
+    pattern: ['minigun', 'sawblade'],
+    result: {
+      id: 'gatlingsawmill', label: 'GATLING SAWMILL', cost: 3500,
+      needs: ['minigun', 'sawblade'],
+      create: (gx, gy) => new GatlingSawmill(gx, gy)
+    }
+  },
+  {
+    pattern: ['crossbow', 'minigun', 'omni'],
+    result: {
+      id: 'extremeturret', label: 'EXTREME TURRET', cost: 12000,
+      needs: ['crossbow', 'minigun', 'omni'],
+      create: (gx, gy) => new ExtremeTurret(gx, gy)
+    }
+  }
+];
+
+let craftSelectedRecipe = null;
+
+function _towerDefById(id) { return CRAFT_TOWER_DEFS.find(d => d.id === id); }
+
+function _towerExistsOnBoard(id) {
+  const def = _towerDefById(id);
+  if (!def) return false;
+  if (def.cls === null) return towers.some(t => t.constructor === Tower);
+  return towers.some(t => t instanceof def.cls);
+}
+
+function _drawIconForTool(ic, tool) {
+  const c = ic.getContext('2d');
+  const W = ic.width, H = ic.height;
+  c.clearRect(0, 0, W, H);
+  // Copy the exact shop icon if this tool exists in the shop toolbar
+  const shopIcon = document.querySelector(`.tool-btn[data-tool="${tool}"] canvas.btn-icon`);
+  if (shopIcon) { c.drawImage(shopIcon, 0, 0, W, H); return; }
+  // Fallback: merged-result icons that aren't in the shop
+  const scale = W / 36;
+  c.save(); c.scale(scale, scale);
+  const tcx = 18, tcy = 18;
+  if (tool === 'flamecannon') {
+    c.shadowBlur=8; c.shadowColor='#ff6600'; c.strokeStyle='#ff8800'; c.lineWidth=1.5;
+    c.beginPath(); for(let i=0;i<6;i++){const a=(Math.PI/3)*i-Math.PI/6;i===0?c.moveTo(tcx+Math.cos(a)*12,tcy+Math.sin(a)*12):c.lineTo(tcx+Math.cos(a)*12,tcy+Math.sin(a)*12);} c.closePath();
+    c.fillStyle='#1a0800'; c.fill(); c.stroke(); c.fillStyle='#ff8800'; c.fillRect(tcx,tcy-3,13,6);
+    c.beginPath(); c.arc(tcx+13,tcy,4,0,Math.PI*2); c.fillStyle='#ffaa33'; c.fill(); c.shadowBlur=0;
+  } else if (tool === 'stormcaller') {
+    c.shadowBlur=10; c.shadowColor='#33ccff'; c.strokeStyle='#33ccff'; c.lineWidth=1.5;
+    c.beginPath(); c.arc(tcx,tcy,10,0,Math.PI*2); c.fillStyle='#001522'; c.fill(); c.stroke();
+    c.strokeStyle='#aaddff'; c.lineWidth=1.5;
+    c.beginPath(); c.moveTo(tcx+3,tcy-8); c.lineTo(tcx-3,tcy); c.lineTo(tcx+2,tcy); c.lineTo(tcx-3,tcy+8); c.stroke(); c.shadowBlur=0;
+  } else if (tool === 'gatlingsawmill') {
+    c.shadowBlur=8; c.shadowColor='#ffcc00'; c.strokeStyle='#ffcc00'; c.lineWidth=1.5;
+    c.beginPath(); for(let i=0;i<6;i++){const a=(Math.PI/3)*i-Math.PI/6;i===0?c.moveTo(tcx+Math.cos(a)*12,tcy+Math.sin(a)*12):c.lineTo(tcx+Math.cos(a)*12,tcy+Math.sin(a)*12);} c.closePath();
+    c.fillStyle='#1a1200'; c.fill(); c.stroke();
+    const teeth=8,ro=8,ri=5; c.beginPath();
+    for(let i=0;i<teeth*2;i++){const a=(Math.PI/teeth)*i;const r=i%2===0?ro:ri;i===0?c.moveTo(tcx+Math.cos(a)*r,tcy+Math.sin(a)*r):c.lineTo(tcx+Math.cos(a)*r,tcy+Math.sin(a)*r);} c.closePath();
+    c.fillStyle='#332200'; c.fill(); c.strokeStyle='#ffcc00'; c.stroke(); c.shadowBlur=0;
+  } else if (tool === 'extremeturret') {
+    c.shadowBlur=10; c.shadowColor='#ffd700'; c.strokeStyle='#ffd700'; c.lineWidth=1.5;
+    c.beginPath(); for(let i=0;i<8;i++){const a=(Math.PI/4)*i-Math.PI/8;i===0?c.moveTo(tcx+Math.cos(a)*12,tcy+Math.sin(a)*12):c.lineTo(tcx+Math.cos(a)*12,tcy+Math.sin(a)*12);} c.closePath();
+    c.fillStyle='#1a1400'; c.fill(); c.stroke();
+    c.beginPath(); c.arc(tcx,tcy,5,0,Math.PI*2); c.strokeStyle='#ffe680'; c.lineWidth=1; c.stroke();
+    c.fillStyle='#ffd700'; c.fillRect(tcx,tcy-5,14,3); c.fillRect(tcx,tcy-1,15,2); c.fillRect(tcx,tcy+3,14,3); c.shadowBlur=0;
+  }
+  c.restore();
+}
+
+function _drawRocketLauncherIcon(ic) {
+  const c = ic.getContext('2d');
+  const W = ic.width, H = ic.height;
+  c.clearRect(0,0,W,H);
+  const scale = W/36; c.save(); c.scale(scale,scale);
+  const tcx=18, tcy=18;
+  c.shadowBlur=10; c.shadowColor='#ff6600'; c.strokeStyle='#ff6600'; c.lineWidth=1.5;
+  c.beginPath();
+  for(let i=0;i<8;i++){const a=(Math.PI/4)*i-Math.PI/8;i===0?c.moveTo(tcx+Math.cos(a)*13,tcy+Math.sin(a)*13):c.lineTo(tcx+Math.cos(a)*13,tcy+Math.sin(a)*13);}
+  c.closePath(); c.fillStyle='#1a0800'; c.fill(); c.stroke();
+  c.fillStyle='#ffaa44'; c.fillRect(tcx,tcy-4,14,8);
+  c.fillStyle='#ffdd00'; c.beginPath(); c.moveTo(tcx,tcy-4); c.lineTo(tcx-7,tcy); c.lineTo(tcx,tcy+4); c.closePath(); c.fill();
+  c.shadowBlur=0; c.restore();
+}
+
+function _drawDoubleBoomerangIcon(ic) {
+  const c = ic.getContext('2d');
+  const W = ic.width, H = ic.height;
+  c.clearRect(0,0,W,H);
+  const scale = W/36; c.save(); c.scale(scale,scale);
+  const tcx=18, tcy=18;
+  // Hex base
+  c.shadowBlur=10; c.shadowColor='#66ddff'; c.strokeStyle='#66ddff'; c.lineWidth=1.5;
+  c.beginPath(); for(let i=0;i<6;i++){const a=(Math.PI/3)*i-Math.PI/6;i===0?c.moveTo(tcx+Math.cos(a)*13,tcy+Math.sin(a)*13):c.lineTo(tcx+Math.cos(a)*13,tcy+Math.sin(a)*13);} c.closePath();
+  c.fillStyle='#04141a'; c.fill(); c.stroke();
+  // Two boomerang glyphs
+  c.lineWidth=2.5;
+  for (let g=0; g<2; g++) {
+    c.save();
+    c.translate(tcx + (g===0?-4:4), tcy);
+    c.rotate(g===0 ? 0.4 : -0.4);
+    c.strokeStyle = g===0 ? '#66ddff' : '#ffe066';
+    for (let k=0;k<2;k++){ c.beginPath(); c.arc(0,0,6,k*Math.PI+0.4,k*Math.PI+Math.PI-0.4); c.stroke(); }
+    c.restore();
+  }
+  c.shadowBlur=0; c.restore();
+}
+
+// Draw a recipe's result icon
+function _drawResultIcon(ic, recipe) {
+  if (recipe.result.id === 'rocketlauncher') _drawRocketLauncherIcon(ic);
+  else if (recipe.result.id === 'doubleboomerang') _drawDoubleBoomerangIcon(ic);
+  else _drawIconForTool(ic, recipe.result.id);
+}
+
+// Build a blueprint card for every recipe: [ing] + [ing] = [result]
+function _buildBlueprints() {
+  const container = document.getElementById('craft-blueprints');
+  container.innerHTML = '';
+  CRAFT_RECIPES.forEach((recipe, idx) => {
+    const card = document.createElement('div');
+    card.className = 'craft-bp';
+    card.dataset.recipeIndex = idx;
+
+    const row = document.createElement('div');
+    row.className = 'craft-recipe-row';
+    const ingredients = recipe.pattern.filter(p => p !== null);
+    ingredients.forEach((typeId, k) => {
+      const slot = document.createElement('div');
+      slot.className = 'craft-slot';
+      const ic = document.createElement('canvas');
+      ic.width = 40; ic.height = 40;
+      _drawIconForTool(ic, typeId);
+      slot.appendChild(ic);
+      row.appendChild(slot);
+      if (k < ingredients.length - 1) {
+        const plus = document.createElement('span');
+        plus.className = 'craft-plus'; plus.textContent = '+';
+        row.appendChild(plus);
+      }
+    });
+    const eq = document.createElement('span');
+    eq.className = 'craft-eq'; eq.textContent = '=';
+    row.appendChild(eq);
+    const rslot = document.createElement('div');
+    rslot.className = 'craft-result-slot';
+    const ric = document.createElement('canvas');
+    ric.width = 44; ric.height = 44;
+    _drawResultIcon(ric, recipe);
+    rslot.appendChild(ric);
+    row.appendChild(rslot);
+    card.appendChild(row);
+
+    const label = document.createElement('div');
+    label.className = 'craft-bp-label';
+    label.textContent = recipe.result.label;
+    card.appendChild(label);
+    const cost = document.createElement('div');
+    cost.className = 'craft-bp-cost';
+    cost.textContent = `${recipe.result.cost}cr`;
+    card.appendChild(cost);
+
+    card.addEventListener('mousedown', e => e.stopPropagation());
+    card.addEventListener('click', e => {
+      e.stopPropagation();
+      craftSelectedRecipe = idx;
+      _updateBlueprints();
+    });
+    container.appendChild(card);
+  });
+}
+
+// Refresh selected-highlight, ingredient availability, and SELECT button state
+function _updateBlueprints() {
+  const placeBtn = document.getElementById('craft-place-btn');
+  document.querySelectorAll('.craft-bp').forEach(card => {
+    const idx = parseInt(card.dataset.recipeIndex);
+    const recipe = CRAFT_RECIPES[idx];
+    card.classList.toggle('selected', idx === craftSelectedRecipe);
+    const slots = card.querySelectorAll('.craft-slot');
+    const ingredients = recipe.pattern.filter(p => p !== null);
+    slots.forEach((slot, k) => {
+      const onBoard = _towerExistsOnBoard(ingredients[k]);
+      slot.classList.toggle('available', onBoard);
+      slot.classList.toggle('missing', !onBoard);
+    });
+  });
+  if (craftSelectedRecipe === null) {
+    placeBtn.disabled = true; placeBtn.textContent = 'SELECT A BLUEPRINT'; return;
+  }
+  const r = CRAFT_RECIPES[craftSelectedRecipe].result;
+  const allOnBoard = r.needs.every(id => _towerExistsOnBoard(id));
+  const canAfford = credits >= r.cost;
+  placeBtn.disabled = !(allOnBoard && canAfford);
+  placeBtn.textContent = !allOnBoard ? 'MISSING TOWERS' : (!canAfford ? `NEED ${r.cost}cr` : `PLACE · ${r.cost}cr`);
+}
+
+// SELECT (top) button — places the chosen blueprint
+document.getElementById('craft-place-btn').addEventListener('mousedown', e => e.stopPropagation());
+document.getElementById('craft-place-btn').addEventListener('click', e => {
+  e.stopPropagation();
+  if (craftSelectedRecipe === null) { tooltip.textContent = '[ SELECT A BLUEPRINT FIRST ]'; return; }
+  const recipe = CRAFT_RECIPES[craftSelectedRecipe];
+  const r = recipe.result;
+  if (!r.needs.every(id => _towerExistsOnBoard(id))) { tooltip.textContent = '[ MISSING COMPONENT TOWERS ON THE BOARD ]'; return; }
+  if (credits < r.cost) { tooltip.textContent = `[ NOT ENOUGH CREDITS — NEED ${r.cost}cr ]`; return; }
+  pendingMerge = recipe;
+  craftPanel.classList.remove('open');
+  mergeBtn.classList.add('active');
+  tooltip.textContent = `[ CLICK ANY EMPTY CELL TO PLACE ${r.label} ]`;
+  canvas.style.cursor = 'crosshair';
+});
+
+drawShopIcons();
+_buildBlueprints();
+
+mergeBtn.addEventListener('click', () => {
+  const open = craftPanel.classList.toggle('open');
+  mergeBtn.classList.toggle('active', open || pendingMerge !== null);
+  if (open) { _buildBlueprints(); _updateBlueprints(); }
+});
 
 function drawShopIcons() {
   const icons = document.querySelectorAll('.tool-btn canvas.btn-icon');

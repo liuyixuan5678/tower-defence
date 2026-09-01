@@ -5,23 +5,35 @@ A browser-based tower defense game with a cyberpunk/sci-fi aesthetic. No install
 ## How to Play
 
 1. Open `index.html` in any modern browser (Chrome, Firefox, Safari, Edge).
-2. On the **cover screen**, choose your **Boss Mode** (Enhanced or Classic).
+2. On the **cover screen**, configure your game options (Boss Mode, Map, add-ons), or **LOAD SAVE** to resume.
 3. Select a tower from the **SHOP** panel on the right.
 4. Place towers on the grid (not on the enemy path).
 5. Click **LAUNCH WAVE** to send enemies — survive all waves to win.
 6. Earn credits from kills and wave clears to buy and upgrade towers.
 7. Use the **DISASTER** panel for powerful one-time abilities during tough waves.
+8. Use the **MERGE** panel to combine towers into powerful merged towers.
 
 **You lose if the amount of lives you have hits zero.**
 
-## Boss Mode (Cover Screen)
+## Cover Screen Options
 
-Choose before starting a new game:
+Choose before starting a new game (settings are in a scrollable box):
 
-| Mode | Description |
-|------|-------------|
-| **Enhanced** | Bosses gain special powers at higher waves (see Boss section below) |
-| **Classic** | All bosses have standard stats only — no immunities or special abilities |
+| Option | Description |
+|--------|-------------|
+| **Boss Mode** | Enhanced (bosses gain powers) or Classic (standard stats only) |
+| **Map** | Normal (single winding road) or Fork (two branching lanes) |
+| **Disasters** | Toggle the DISASTER panel of one-time abilities on/off |
+| **Tower Merging** | Toggle the MERGE panel that combines towers into merged towers on/off |
+| **OP Weapons** | Unlocks the LOL turret — 1,000,000 dmg bullet every 5 seconds |
+| **LOAD SAVE** | Resume a previously saved game from a `.json` file |
+
+## Maps
+
+| Map | Description |
+|-----|-------------|
+| **Normal** | Single long winding road — enemies follow one path. Classic tower defense layout. |
+| **Fork** | Road splits into two branches — enemies randomly pick a path. Cover both lanes to survive. |
 
 ## Controls
 
@@ -57,6 +69,7 @@ Choose before starting a new game:
 | Super Turret | 2000cr | Fires bullets across the entire board |
 | Tazor | 5000cr | Continuous 500 dmg/frame electric arcs to all enemies in range; bypasses all immunities |
 | Energy Launcher | 6000cr | Fires a continuous beam to the board edge toward nearest enemy; 1000 dmg/frame, bypasses all immunities |
+| LOL *(OP Weapons)* | 100000cr | Fires one massive bullet every 5 seconds for 1,000,000 damage |
 
 All towers can be upgraded up to **level 5** by clicking on a placed tower. Right-click to delete and receive a partial refund.
 
@@ -89,13 +102,38 @@ Accessed via the **DISASTER** panel. Instant disasters (Lightning, Tsunami, Eart
 | Hailstorm | 300cr | 8 seconds of random hail pellets raining across the board, 1500 dmg per hit |
 | Void | 5000cr | Place a void rift dealing 500 dmg/frame to all enemies in range for 2 minutes; bypasses all immunities |
 
+## Tower Merging
+
+Enabled via the **Tower Merging** toggle on the cover screen. Open the **MERGE** panel (slides in from the right) to see all merge **blueprints**. Each blueprint shows its ingredient towers and the resulting merged tower. Blueprints with many ingredients display across multiple rows.
+
+**How to merge:**
+
+1. Have the required component towers placed on the board (their slots glow **green** when present, **red** when missing).
+2. Click a blueprint to select it.
+3. Press the **SELECT** button at the top of the panel (enabled only when you own the components and can afford the cost).
+4. Click any empty cell to place the merged tower — the component towers are consumed.
+
+| Merged Tower | Recipe | Cost | Description |
+|--------------|--------|------|-------------|
+| Rocket Launcher | Super Turret + Missile Launcher | 7500cr | Board-wide homing rockets with 1s reload and large AOE |
+| Triple Boomerang | Boomerang + Sawblade | 200cr | Fires three boomerangs per shot, each piercing enemies out and back |
+| Flame Cannon | Flamethrower + Cannon | 200cr | Lobs explosive fireballs with a large blast radius |
+| Storm Caller | Tazor + Energy Launcher | 8000cr | Board-reaching chain lightning that arcs between enemies; bypasses all immunities |
+| Gatling Sawmill | Minigun + Sawblade | 500cr | Rapid-fires piercing sawblade bullets from a spinning barrel |
+| Extreme Turret | Crossbow + Minigun + Super Turret | 1000cr | Board-wide range, extreme fire rate, triple barrel — the ultimate turret |
+| Omega Core | All 15 shop towers (see below) | 50000cr | 3 simultaneous board-edge beams + boomerang bursts + laser pulses; bypasses all immunities |
+
+**Omega Core ingredients:** Turret, Cannon, Flamethrower, Laser Rod, Spinning Laser Rod, Sawblade, Minigun, Crossbow, Laser Turret, Boomerang, Missile Launcher, Plasma Turret, Super Turret, Tazor, Energy Launcher.
+
+Merged towers can be upgraded to **level 5** like any other tower by clicking them.
+
 ## Enemies
 
 - **Regular enemies**: HP scales with wave number and tier. Speed 1.2. Reward 10–50cr.
 - **Boss enemies** (every 10th wave): 8× HP of the prior wave's max, speed 0.6. Reward 50–150cr.
 - Boss enemies have splash damage resistance (bomb/cannon AOE deals 1/8 damage).
 
-Enemies follow two branching paths (upper and lower) that share entry and exit corridors, and randomly pick a path each spawn.
+Enemies follow the path(s) of the selected map. On the Fork map they randomly pick upper or lower branch each spawn.
 
 ## Boss Powers (Enhanced Mode)
 
@@ -106,7 +144,7 @@ Enemies follow two branching paths (upper and lower) that share entry and exit c
 | 80+ | Fortress Boss | Immune to bullets AND explosives (missile launcher, bomb, nuke, cannon) |
 | 120, 150, 180… | Siege Boss | Bullet + explosive immune; fires homing missiles at nearest tower every 5 seconds |
 
-Use **Tazor**, **Energy Launcher**, or the **Void** disaster to damage immune bosses — they bypass all immunities.
+Use **Tazor**, **Energy Launcher**, **Omega Core**, or the **Void** disaster to damage immune bosses — they bypass all immunities.
 
 ## Economy
 
@@ -121,12 +159,14 @@ Use **Tazor**, **Energy Launcher**, or the **Void** disaster to damage immune bo
 - Sawblades only deal damage when the spinning blade itself touches an enemy — position carefully.
 - Missile Launchers are expensive but devastate large clusters of enemies.
 - Tazor and Energy Launcher bypass all boss immunities — essential for late-game Siege Bosses.
+- Merge towers via the MERGE panel for huge power spikes — Storm Caller and Omega Core excel in the late game.
 - Save credits before boss waves (wave 10, 20, 30, …) for emergency purchases.
 - In Classic mode, any tower combination can handle all bosses.
+- On the Fork map, place towers near the shared entry/exit corridors to cover both branches.
 
 ## Technical Details
 
-- Single-file game: all logic, CSS, and Canvas rendering in `index.html` (~6800 lines).
+- Single-file game: all logic, CSS, and Canvas rendering in `index.html` (~8500 lines).
 - No external dependencies, no build step.
 - Vanilla JavaScript (ES6+) with `requestAnimationFrame` game loop.
 - Fixed-timestep accumulator for consistent speed across different display refresh rates.

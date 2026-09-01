@@ -260,11 +260,20 @@
   #disaster-panel.open { right: 0; }
 
   #craft-panel {
-    position: fixed; top: 50%; transform: translateY(-50%);
-    right: -330px; width: 300px; max-height: 90vh; overflow-y: auto;
-    background: var(--panel); border: 1px solid #22aa66; border-right: none;
-    z-index: 50; transition: right 0.25s ease;
-    padding: 14px; font-family: 'Orbitron', monospace;
+    position: fixed;
+    top: 0;
+    right: -330px;
+    width: 300px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    border-left: 1px solid #22aa66;
+    z-index: 50;
+    transition: right 0.25s ease;
+    overflow-y: auto;
+    padding: 60px 14px 14px;
+    font-family: 'Orbitron', monospace;
   }
   #craft-panel.open { right: 0; }
   .craft-title {
@@ -771,7 +780,17 @@
     display: flex; align-items: center; justify-content: center;
     font-family: 'Orbitron', monospace;
   }
-  #cover-inner { text-align: center; max-width: 640px; padding: 40px 30px; }
+  #cover-inner { text-align: center; max-width: 640px; padding: 40px 30px; display: flex; flex-direction: column; align-items: center; max-height: 100vh; }
+  #cover-scroll-box {
+    width: 100%; max-height: 55vh; overflow-y: auto; overflow-x: hidden;
+    border: 1px solid rgba(0,245,255,0.15); border-radius: 8px;
+    padding: 22px 22px 10px;
+    background: rgba(0,245,255,0.015);
+    margin-bottom: 22px;
+    scrollbar-width: thin; scrollbar-color: #00f5ff22 transparent;
+  }
+  #cover-scroll-box::-webkit-scrollbar { width: 4px; }
+  #cover-scroll-box::-webkit-scrollbar-thumb { background: rgba(0,245,255,0.25); border-radius: 2px; }
   #cover-title {
     font-size: 52px; font-weight: 900; color: #00f5ff; letter-spacing: 8px;
     text-shadow: 0 0 30px #00f5ff, 0 0 70px rgba(0,245,255,0.4);
@@ -784,7 +803,7 @@
   #cover-options-label {
     font-size: 11px; color: #666; letter-spacing: 5px; margin-bottom: 16px;
   }
-  #cover-options { display: flex; gap: 18px; margin-bottom: 40px; }
+  #cover-options { display: flex; gap: 18px; margin-bottom: 20px; }
   .cover-option {
     flex: 1; border: 1px solid rgba(0,245,255,0.2); border-radius: 6px;
     padding: 22px 18px; cursor: pointer; transition: all 0.2s;
@@ -824,7 +843,7 @@
   .cover-toggle-row {
     display: flex; align-items: center; justify-content: space-between;
     border: 1px solid rgba(0,245,255,0.15); border-radius: 6px;
-    padding: 16px 20px; margin-bottom: 32px;
+    padding: 16px 20px; margin-bottom: 14px;
     background: rgba(0,245,255,0.02);
   }
   .cover-toggle-label { font-size: 13px; color: #aac; letter-spacing: 2px; }
@@ -858,36 +877,59 @@
   <div id="cover-inner">
     <div id="cover-title">NEXUS DEFENSE</div>
     <div id="cover-subtitle">TOWER DEFENSE</div>
-    <div id="cover-options-label">BOSS POWERS</div>
-    <div id="cover-options">
-      <div class="cover-option selected" id="opt-enhanced" onclick="selectBossMode('full')">
-        <div class="opt-name">ENHANCED</div>
-        <div class="opt-desc">Bosses gain special abilities at higher waves:<br>Wave 60+ → Bullet immune<br>Wave 80+ → Explosive immune<br>Wave 120/150/180… → Fires homing missiles</div>
+    <div id="cover-scroll-box">
+      <div id="cover-options-label">BOSS POWERS</div>
+      <div id="cover-options">
+        <div class="cover-option selected" id="opt-enhanced" onclick="selectBossMode('full')">
+          <div class="opt-name">ENHANCED</div>
+          <div class="opt-desc">Bosses gain special abilities at higher waves:<br>Wave 60+ → Bullet immune<br>Wave 80+ → Explosive immune<br>Wave 120/150/180… → Fires homing missiles</div>
+        </div>
+        <div class="cover-option" id="opt-classic" onclick="selectBossMode('classic')">
+          <div class="opt-name">CLASSIC</div>
+          <div class="opt-desc">All bosses have standard stats only.<br>No immunities or special abilities.<br>Recommended for new players.</div>
+        </div>
       </div>
-      <div class="cover-option" id="opt-classic" onclick="selectBossMode('classic')">
-        <div class="opt-name">CLASSIC</div>
-        <div class="opt-desc">All bosses have standard stats only.<br>No immunities or special abilities.<br>Recommended for new players.</div>
+      <div id="cover-options-label" style="margin-top:18px">MAP</div>
+      <div id="cover-map-options" style="display:flex;gap:18px;margin-bottom:28px">
+        <div class="cover-option" id="opt-map-normal" onclick="selectMap('normal')">
+          <div class="opt-name">NORMAL</div>
+          <div class="opt-desc">Single long winding road.<br>Enemies follow one path.<br>Classic tower defense layout.</div>
+        </div>
+        <div class="cover-option selected" id="opt-map-fork" onclick="selectMap('fork')">
+          <div class="opt-name">FORK</div>
+          <div class="opt-desc">Road splits into two branches.<br>Enemies randomly pick a path.<br>Cover both lanes to survive.</div>
+        </div>
       </div>
-    </div>
-    <div class="cover-toggle-row">
-      <div>
-        <div class="cover-toggle-label">DISASTERS</div>
-        <div class="cover-toggle-sub">Lightning, Tsunami, Void and more — powerful one-time abilities</div>
+      <div class="cover-toggle-row">
+        <div>
+          <div class="cover-toggle-label">DISASTERS</div>
+          <div class="cover-toggle-sub">Lightning, Tsunami, Void and more — powerful one-time abilities</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="disasters-toggle" checked>
+          <span class="toggle-track"></span>
+        </label>
       </div>
-      <label class="toggle-switch">
-        <input type="checkbox" id="disasters-toggle" checked>
-        <span class="toggle-track"></span>
-      </label>
-    </div>
-    <div class="cover-toggle-row">
-      <div>
-        <div class="cover-toggle-label">TOWER MERGING</div>
-        <div class="cover-toggle-sub">Combine two towers into a powerful merged tower</div>
+      <div class="cover-toggle-row">
+        <div>
+          <div class="cover-toggle-label">TOWER MERGING</div>
+          <div class="cover-toggle-sub">Combine two towers into a powerful merged tower</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="merging-toggle" checked>
+          <span class="toggle-track"></span>
+        </label>
       </div>
-      <label class="toggle-switch">
-        <input type="checkbox" id="merging-toggle" checked>
-        <span class="toggle-track"></span>
-      </label>
+      <div class="cover-toggle-row">
+        <div>
+          <div class="cover-toggle-label">OP WEAPONS</div>
+          <div class="cover-toggle-sub">Unlocks the LOL turret — 1,000,000 dmg bullet every 5 seconds</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="opweapons-toggle">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
     </div>
     <button id="cover-start-btn" onclick="startFromCover()">START GAME</button>
     <br>
@@ -916,9 +958,9 @@
   </div>
   <button id="disaster-btn">DISASTER</button>
   <button id="shop-btn">SHOP</button>
+  <button id="merge-btn">MERGE</button>
   <button id="save-btn">SAVE</button>
   <input type="file" id="load-file-input" accept=".json" style="display:none">
-  <button id="merge-btn">MERGE</button>
   <button id="delete-btn">DELETE</button>
   <div id="hud-wave-controls">
     <button id="start-btn">LAUNCH WAVE</button>
@@ -967,6 +1009,7 @@
   <button class="tool-btn" data-tool="nuke"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>NUKE</span><span class="tool-cost">500cr</span></span></button>
   <button class="tool-btn" data-tool="tazor"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>TAZOR</span><span class="tool-cost">5000cr</span></span></button>
   <button class="tool-btn" data-tool="energylauncher"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>ENERGY LAUNCHER</span><span class="tool-cost">6000cr</span></span></button>
+  <button class="tool-btn" data-tool="lol" style="display:none"><canvas class="btn-icon" width="36" height="36"></canvas><span class="btn-label"><span>LOL</span><span class="tool-cost">100000cr</span></span></button>
 </div>
 
 <div id="game-wrap">
@@ -1038,9 +1081,8 @@ let starCanvas = null, starCtx = null;
 const ENTRY = [{x:0, y:12}, {x:8, y:12}];
 const EXIT  = [{x:32, y:12}, {x:39, y:12}];
 
-// One road that splits into two branches then merges back
-// Branch A (upper): rows 4–10. Branch B (lower): rows 14–20. Gap ≥ 3 rows.
-const PATHS = [
+// MAP: FORK — one road splits into upper/lower branches then merges back
+const MAP_FORK = [
   // Branch A: upper
   [
     ...ENTRY,
@@ -1070,6 +1112,29 @@ const PATHS = [
     ...EXIT,
   ],
 ];
+
+// MAP: NORMAL — single long winding road across the whole board
+const MAP_NORMAL = [
+  [
+    {x:0,  y:4},
+    {x:10, y:4},
+    {x:10, y:10},
+    {x:4,  y:10},
+    {x:4,  y:18},
+    {x:14, y:18},
+    {x:14, y:12},
+    {x:20, y:12},
+    {x:20, y:20},
+    {x:28, y:20},
+    {x:28, y:6},
+    {x:36, y:6},
+    {x:36, y:16},
+    {x:39, y:16},
+  ],
+];
+
+// Active map paths — set from cover screen selection
+let PATHS = MAP_FORK;
 
 // Path cells set (union of all paths)
 let pathCells = new Set();
@@ -3704,12 +3769,16 @@ canvas.addEventListener('click', e => {
     const comps = r.needs.map(id => {
       const def = CRAFT_TOWER_DEFS.find(d => d.id === id);
       if (!def) return null;
+      if (def.cls === 'laserrod') return { _laserrod: true, ref: laserRods[0] };
       return def.cls === null ? towers.find(t => t.constructor === Tower) : towers.find(t => t instanceof def.cls);
     });
     if (comps.some(c => !c)) { tooltip.textContent = '[ COMPONENT TOWERS NO LONGER ON BOARD ]'; pendingMerge = null; mergeBtn.classList.remove('active'); return; }
     if (credits < r.cost) { tooltip.textContent = '[ NOT ENOUGH CREDITS ]'; return; }
     credits -= r.cost;
-    for (const comp of comps) towers = towers.filter(t => t !== comp);
+    for (const comp of comps) {
+      if (comp._laserrod) laserRods = laserRods.filter(lr => lr !== comp.ref);
+      else towers = towers.filter(t => t !== comp);
+    }
     const merged = r.create(gx, gy);
     towers.push(merged);
     updateHUD();
@@ -3981,7 +4050,7 @@ canvas.addEventListener('click', e => {
       }
       return;
     }
-    const db = towers.find(t => t instanceof DoubleBoomerang && t.gx === gx && t.gy === gy);
+    const db = towers.find(t => t instanceof TripleBoomerang && t.gx === gx && t.gy === gy);
     if (db) {
       const costTable = [800, 1200, 1800, 2600];
       if (db.level < 5) {
@@ -4010,7 +4079,7 @@ canvas.addEventListener('click', e => {
       }
       return;
     }
-    const t = towers.find(t => t instanceof Tower && !(t instanceof Flamethrower) && !(t instanceof Cannon) && !(t instanceof Minigun) && !(t instanceof Crossbow) && !(t instanceof OmniCannon) && !(t instanceof PlasmaTurret) && !(t instanceof LaserTurret) && !(t instanceof Boomerang) && !(t instanceof MissileLauncher) && !(t instanceof Tazor) && !(t instanceof EnergyLauncher) && !(t instanceof SpinningLaserRod) && !(t instanceof Sawblade) && !(t instanceof RocketLauncher) && !(t instanceof DoubleBoomerang) && !_mergedUpgradeInfo(t) && t.gx === gx && t.gy === gy);
+    const t = towers.find(t => t instanceof Tower && !(t instanceof Flamethrower) && !(t instanceof Cannon) && !(t instanceof Minigun) && !(t instanceof Crossbow) && !(t instanceof OmniCannon) && !(t instanceof PlasmaTurret) && !(t instanceof LaserTurret) && !(t instanceof Boomerang) && !(t instanceof MissileLauncher) && !(t instanceof Tazor) && !(t instanceof EnergyLauncher) && !(t instanceof SpinningLaserRod) && !(t instanceof Sawblade) && !(t instanceof RocketLauncher) && !(t instanceof TripleBoomerang) && !_mergedUpgradeInfo(t) && t.gx === gx && t.gy === gy);
     if (t) {
       const dmgTable = [15, 30, 60, 100, 300];
       const costTable = [100, 200, 300, 600];
@@ -4109,7 +4178,7 @@ canvas.addEventListener('click', e => {
     return;
   }
   if (pendingMerge) return; // handled above
-  if (selectedTool !== 'turret' && selectedTool !== 'flamethrower' && selectedTool !== 'cannon' && selectedTool !== 'laser' && selectedTool !== 'minigun' && selectedTool !== 'crossbow' && selectedTool !== 'omni' && selectedTool !== 'plasma' && selectedTool !== 'laserturret' && selectedTool !== 'boomerang' && selectedTool !== 'missile' && selectedTool !== 'tazor' && selectedTool !== 'energylauncher' && selectedTool !== 'spinlaser' && selectedTool !== 'sawblade') return;
+  if (selectedTool !== 'turret' && selectedTool !== 'flamethrower' && selectedTool !== 'cannon' && selectedTool !== 'laser' && selectedTool !== 'minigun' && selectedTool !== 'crossbow' && selectedTool !== 'omni' && selectedTool !== 'plasma' && selectedTool !== 'laserturret' && selectedTool !== 'boomerang' && selectedTool !== 'missile' && selectedTool !== 'tazor' && selectedTool !== 'energylauncher' && selectedTool !== 'spinlaser' && selectedTool !== 'sawblade' && selectedTool !== 'lol') return;
   if (selectedTool === 'laser') {
     if (laserRods.find(r => r.gx === gx && r.gy === gy)) return;
     if (towers.find(t => t.gx === gx && t.gy === gy)) return;
@@ -4120,7 +4189,7 @@ canvas.addEventListener('click', e => {
     return;
   }
   if (towers.find(t => t.gx === gx && t.gy === gy)) return;
-  const cost = selectedTool === 'flamethrower' ? 300 : selectedTool === 'cannon' ? 150 : selectedTool === 'minigun' ? 300 : selectedTool === 'crossbow' ? 150 : selectedTool === 'omni' ? 2000 : selectedTool === 'plasma' ? 400 : selectedTool === 'laserturret' ? 300 : selectedTool === 'boomerang' ? 100 : selectedTool === 'missile' ? 1000 : selectedTool === 'tazor' ? 5000 : selectedTool === 'energylauncher' ? 6000 : selectedTool === 'spinlaser' ? 200 : selectedTool === 'sawblade' ? 120 : 50;
+  const cost = selectedTool === 'flamethrower' ? 300 : selectedTool === 'cannon' ? 150 : selectedTool === 'minigun' ? 300 : selectedTool === 'crossbow' ? 150 : selectedTool === 'omni' ? 2000 : selectedTool === 'plasma' ? 400 : selectedTool === 'laserturret' ? 300 : selectedTool === 'boomerang' ? 100 : selectedTool === 'missile' ? 1000 : selectedTool === 'tazor' ? 5000 : selectedTool === 'energylauncher' ? 6000 : selectedTool === 'spinlaser' ? 200 : selectedTool === 'sawblade' ? 120 : selectedTool === 'lol' ? 100000 : 50;
   if (credits < cost) return;
   credits -= cost;
   if (selectedTool === 'flamethrower') towers.push(new Flamethrower(gx, gy));
@@ -4136,6 +4205,7 @@ canvas.addEventListener('click', e => {
   else if (selectedTool === 'energylauncher') towers.push(new EnergyLauncher(gx, gy));
   else if (selectedTool === 'spinlaser') towers.push(new SpinningLaserRod(gx, gy));
   else if (selectedTool === 'sawblade') towers.push(new Sawblade(gx, gy));
+  else if (selectedTool === 'lol') towers.push(new LolTurret(gx, gy));
   else towers.push(new Tower(gx, gy));
   updateHUD();
 });
@@ -4400,7 +4470,7 @@ function drawHoverCell() {
       }
       return;
     }
-    if (!deleteMode && occupiedTower instanceof DoubleBoomerang) {
+    if (!deleteMode && occupiedTower instanceof TripleBoomerang) {
       const lvl = occupiedTower.level || 1;
       const costTable = [800, 1200, 1800, 2600];
       if (lvl < 5) {
@@ -4436,7 +4506,7 @@ function drawHoverCell() {
       }
       return;
     }
-    if (!deleteMode && occupiedTower instanceof Tower && !(occupiedTower instanceof Flamethrower) && !(occupiedTower instanceof Cannon) && !(occupiedTower instanceof Minigun) && !(occupiedTower instanceof Crossbow) && !(occupiedTower instanceof OmniCannon) && !(occupiedTower instanceof PlasmaTurret) && !(occupiedTower instanceof Tazor) && !(occupiedTower instanceof EnergyLauncher) && !(occupiedTower instanceof SpinningLaserRod) && !(occupiedTower instanceof Sawblade) && !(occupiedTower instanceof RocketLauncher) && !(occupiedTower instanceof DoubleBoomerang) && !_mergedUpgradeInfo(occupiedTower)) {
+    if (!deleteMode && occupiedTower instanceof Tower && !(occupiedTower instanceof Flamethrower) && !(occupiedTower instanceof Cannon) && !(occupiedTower instanceof Minigun) && !(occupiedTower instanceof Crossbow) && !(occupiedTower instanceof OmniCannon) && !(occupiedTower instanceof PlasmaTurret) && !(occupiedTower instanceof Tazor) && !(occupiedTower instanceof EnergyLauncher) && !(occupiedTower instanceof SpinningLaserRod) && !(occupiedTower instanceof Sawblade) && !(occupiedTower instanceof RocketLauncher) && !(occupiedTower instanceof TripleBoomerang) && !_mergedUpgradeInfo(occupiedTower)) {
       const lvl = occupiedTower.level || 1;
       const costTable = [100, 200, 300, 600];
       if (lvl < 5) {
@@ -4749,6 +4819,7 @@ function loop(ts) {
   drawVolcanoPreview();
   drawTornadoPreview();
   drawMeteorPreview();
+  for (const s of spikes) s.draw();
   for (const m of muds) m.draw();
   for (const lm of landmines) lm.draw();
   for (const r of laserRods) r.draw();
@@ -6113,14 +6184,98 @@ function drawDisasterIcons() {
   vc2.shadowBlur = 0;
 }
 
+// ---- LOL TURRET (OP Weapons add-on) ----
+// Fires one massive bullet every 5 seconds (300 frames). 1,000,000 damage.
+class LolTurret extends Tower {
+  constructor(gx, gy) {
+    super(gx, gy);
+    this.range = CELL * 6;
+    this.damage = 1000000;
+    this.fireRate = 300; // 5 seconds at 60fps
+  }
+
+  draw() {
+    const pulse = Math.sin(this.pulseT * 0.5) * 0.08 + 1;
+    const s = CELL * 0.44 * pulse;
+    const lvl = this.level || 1;
+    ctx.save();
+    ctx.translate(this.wx, this.wy);
+
+    // Glowing gold ring
+    ctx.beginPath();
+    ctx.arc(0, 0, s * 1.5, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255,220,0,0.15)';
+    ctx.lineWidth = CELL * 0.4;
+    ctx.stroke();
+
+    // Body
+    ctx.beginPath();
+    ctx.arc(0, 0, s, 0, Math.PI * 2);
+    ctx.fillStyle = '#120800';
+    ctx.shadowBlur = 24;
+    ctx.shadowColor = '#ffcc00';
+    ctx.fill();
+    ctx.strokeStyle = '#ffcc00';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // "LOL" text
+    ctx.font = `bold ${Math.round(s * 0.72)}px "Orbitron", monospace`;
+    ctx.fillStyle = this.shootT > 0 ? '#ffffff' : '#ffcc00';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    if (this.shootT > 0) { ctx.shadowBlur = 20; ctx.shadowColor = '#ffff00'; }
+    ctx.fillText('LOL', 0, 0);
+    ctx.shadowBlur = 0;
+
+    // Charge bar — fills up over fireRate frames
+    const chargeW = s * 2;
+    const chargeH = 5;
+    const elapsed = this.fireRate - (this.reloadTimer || this.fireRate);
+    const pct = Math.min(1, elapsed / this.fireRate);
+    ctx.fillStyle = 'rgba(255,200,0,0.15)';
+    ctx.fillRect(-chargeW / 2, s + 4, chargeW, chargeH);
+    ctx.fillStyle = pct >= 1 ? '#ffffff' : '#ffcc00';
+    ctx.shadowBlur = pct >= 1 ? 10 : 0;
+    ctx.shadowColor = '#ffff00';
+    ctx.fillRect(-chargeW / 2, s + 4, chargeW * pct, chargeH);
+    ctx.shadowBlur = 0;
+
+    // Thick barrel pointing at target
+    if (this.target) {
+      const dx = this.target.wx - this.wx, dy = this.target.wy - this.wy;
+      const a = Math.atan2(dy, dx);
+      ctx.rotate(a);
+      ctx.fillStyle = this.shootT > 0 ? '#ffffff' : '#ffdd44';
+      ctx.shadowBlur = this.shootT > 0 ? 18 : 4;
+      ctx.shadowColor = '#ffcc00';
+      ctx.fillRect(0, -CELL * 0.13, s * 1.4, CELL * 0.26);
+    }
+    ctx.shadowBlur = 0;
+    ctx.restore();
+
+    if (lvl >= 2) {
+      ctx.font = `bold ${Math.round(CELL * 0.28)}px monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#ffcc00';
+      ctx.fillText('★'.repeat(Math.min(lvl - 1, 4)), this.wx, this.wy - s - 8);
+      ctx.textAlign = 'left';
+    }
+  }
+}
+
 function towerType(t) {
+  if (t instanceof LolTurret) return 'lol';
+  if (t instanceof OmegaCore) return 'omegacore';
   if (t instanceof Flamethrower) return 'flamethrower';
   if (t instanceof Minigun) return 'minigun';
   if (t instanceof Crossbow) return 'crossbow';
   if (t instanceof OmniCannon) return 'omni';
   if (t instanceof PlasmaTurret) return 'plasma';
   if (t instanceof LaserTurret) return 'laserturret';
-  if (t instanceof DoubleBoomerang) return 'doubleboomerang';
+  if (t instanceof TripleBoomerang) return 'tripleboomerang';
   if (t instanceof FlameCannon) return 'flamecannon';
   if (t instanceof StormCaller) return 'stormcaller';
   if (t instanceof GatlingSawmill) return 'gatlingsawmill';
@@ -6183,7 +6338,9 @@ function loadGameData(data) {
   // Rebuild towers
   towers = data.towers.map(d => {
     let t;
-    if (d.type === 'flamethrower') t = new Flamethrower(d.gx, d.gy);
+    if (d.type === 'lol') t = new LolTurret(d.gx, d.gy);
+    else if (d.type === 'omegacore') t = new OmegaCore(d.gx, d.gy);
+    else if (d.type === 'flamethrower') t = new Flamethrower(d.gx, d.gy);
     else if (d.type === 'minigun') t = new Minigun(d.gx, d.gy);
     else if (d.type === 'crossbow') t = new Crossbow(d.gx, d.gy);
     else if (d.type === 'omni') t = new OmniCannon(d.gx, d.gy);
@@ -6194,7 +6351,7 @@ function loadGameData(data) {
     else if (d.type === 'tazor') t = new Tazor(d.gx, d.gy);
     else if (d.type === 'energylauncher') t = new EnergyLauncher(d.gx, d.gy);
     else if (d.type === 'rocketlauncher') t = new RocketLauncher(d.gx, d.gy);
-    else if (d.type === 'doubleboomerang') t = new DoubleBoomerang(d.gx, d.gy);
+    else if (d.type === 'tripleboomerang') t = new TripleBoomerang(d.gx, d.gy);
     else if (d.type === 'flamecannon') t = new FlameCannon(d.gx, d.gy);
     else if (d.type === 'stormcaller') t = new StormCaller(d.gx, d.gy);
     else if (d.type === 'gatlingsawmill') t = new GatlingSawmill(d.gx, d.gy);
@@ -6300,20 +6457,34 @@ initGame();
 let bossMode = 'full';
 let disastersEnabled = true;
 let mergingEnabled = true;
+let opWeaponsEnabled = false;
 function selectBossMode(mode) {
   bossMode = mode;
   document.getElementById('opt-enhanced').classList.toggle('selected', mode === 'full');
   document.getElementById('opt-classic').classList.toggle('selected', mode === 'classic');
 }
+let selectedMap = 'fork';
+function selectMap(map) {
+  selectedMap = map;
+  document.getElementById('opt-map-normal').classList.toggle('selected', map === 'normal');
+  document.getElementById('opt-map-fork').classList.toggle('selected', map === 'fork');
+}
 function startFromCover() {
+  PATHS = selectedMap === 'normal' ? MAP_NORMAL : MAP_FORK;
+  buildPathCells();
+  buildGridCache();
   disastersEnabled = document.getElementById('disasters-toggle').checked;
   mergingEnabled = document.getElementById('merging-toggle').checked;
+  opWeaponsEnabled = document.getElementById('opweapons-toggle').checked;
   if (!disastersEnabled) {
     document.getElementById('disaster-btn').style.display = 'none';
     document.getElementById('disaster-panel').style.display = 'none';
   }
   if (!mergingEnabled) {
     document.getElementById('merge-btn').style.display = 'none';
+  }
+  if (opWeaponsEnabled) {
+    document.querySelector('.tool-btn[data-tool="lol"]').style.display = '';
   }
   document.getElementById('cover-page').style.display = 'none';
   requestAnimationFrame(loop);
@@ -6677,9 +6848,9 @@ class RocketLauncher extends Tower {
   }
 }
 
-// ---- DOUBLE BOOMERANG (merged: Boomerang + Sawblade) ----
-// Fires TWO boomerangs per shot in a spread, each hitting on the way out and back.
-class DoubleBoomerang extends Tower {
+// ---- TRIPLE BOOMERANG (merged: Boomerang + Sawblade) ----
+// Fires THREE boomerangs per shot in a spread, each hitting on the way out and back.
+class TripleBoomerang extends Tower {
   constructor(gx, gy) {
     super(gx, gy);
     this.range = CELL * 9;
@@ -6690,8 +6861,8 @@ class DoubleBoomerang extends Tower {
   fire(target) {
     const dx = target.wx - this.wx, dy = target.wy - this.wy;
     const baseAng = Math.atan2(dy, dx);
-    const spread = 0.35;
-    for (const off of [-spread, spread]) {
+    const spread = 0.3;
+    for (const off of [-spread, 0, spread]) {
       const a = baseAng + off;
       projectiles.push(new BoomerangProjectile(this, Math.cos(a), Math.sin(a), this.range, this.damage));
     }
@@ -6729,14 +6900,14 @@ class DoubleBoomerang extends Tower {
     ctx.lineWidth = lvl >= 2 ? 2.5 : 2;
     ctx.stroke();
 
-    // Two counter-rotating boomerang glyphs
+    // Three counter-rotating boomerang glyphs
     if (this.shootT > 0) { ctx.shadowBlur = 16; ctx.shadowColor = baseColor; }
     ctx.strokeStyle = this.shootT > 0 ? '#ffffff' : baseColor;
     ctx.lineWidth = 2.5;
-    for (let g = 0; g < 2; g++) {
+    for (let g = 0; g < 3; g++) {
       ctx.save();
-      ctx.rotate((g === 0 ? 1 : -1) * this.pulseT * 1.5 + g * Math.PI / 2);
-      ctx.translate(g === 0 ? -s * 0.28 : s * 0.28, 0);
+      ctx.rotate((g === 1 ? 1 : -1) * this.pulseT * 1.5 + g * Math.PI * 2 / 3);
+      ctx.translate(g === 0 ? -s * 0.28 : g === 1 ? s * 0.28 : 0, g === 2 ? -s * 0.28 : 0);
       for (let k = 0; k < 2; k++) {
         ctx.beginPath();
         ctx.arc(0, 0, s * 0.42, k * Math.PI + 0.4, k * Math.PI + Math.PI - 0.4);
@@ -6940,12 +7111,233 @@ class ExtremeTurret extends Tower {
   }
 }
 
+// ---- OMEGA CORE (everything merge) ----
+// Fires a continuous board-edge beam that explodes every enemy it touches,
+// simultaneously launches boomerangs in a spread and fires laser pulses.
+class OmegaCore extends Tower {
+  constructor(gx, gy) {
+    super(gx, gy);
+    this.range = 99999;
+    this.damage = 25000;      // beam dmg/frame, bypasses immunities
+    this.beamAngle = 0;
+    this.beamEnd = null;
+    this.hasTarget = false;
+    this.boomTimer = 0;       // boomerang burst timer
+    this.laserTimer = 0;      // laser pulse timer
+    this._beamAngles = [];    // extra beams (multi-barrel)
+    this._laserPulse = null;
+  }
+
+  _distToSegment(px, py, ax, ay, bx, by) {
+    const dx = bx - ax, dy = by - ay;
+    const lenSq = dx * dx + dy * dy;
+    if (lenSq === 0) return Math.hypot(px - ax, py - ay);
+    let t = ((px - ax) * dx + (py - ay) * dy) / lenSq;
+    t = Math.max(0, Math.min(1, t));
+    return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+  }
+
+  _extendRay(angle) {
+    const W = canvas.width, H = canvas.height;
+    const cos = Math.cos(angle), sin = Math.sin(angle);
+    const tVals = [];
+    if (cos > 0) tVals.push((W - this.wx) / cos);
+    else if (cos < 0) tVals.push(-this.wx / cos);
+    if (sin > 0) tVals.push((H - this.wy) / sin);
+    else if (sin < 0) tVals.push(-this.wy / sin);
+    const tMax = Math.max(1, ...tVals.filter(v => v > 0));
+    return { x: this.wx + cos * tMax, y: this.wy + sin * tMax };
+  }
+
+  _hitBeam(ax, ay, bx, by) {
+    const beamRadius = CELL * 0.9;
+    for (const e of enemies) {
+      if (e.dead || e.reached) continue;
+      if (this._distToSegment(e.wx, e.wy, ax, ay, bx, by) <= beamRadius) {
+        e.hp -= this.damage;
+        spawnExplosion(e.wx, e.wy);
+        if (e.hp <= 0) { e.dead = true; credits += enemyReward(e); updateHUD(); }
+        this.hasTarget = true;
+      }
+    }
+  }
+
+  update() {
+    this.pulseT += 0.06;
+    this.hasTarget = false;
+    this.beamEnd = null;
+    this._beamAngles = [];
+
+    // Find nearest enemy for primary beam
+    let nearest = null, nearestDist = Infinity;
+    for (const e of enemies) {
+      if (e.dead || e.reached) continue;
+      const d = Math.hypot(e.wx - this.wx, e.wy - this.wy);
+      if (d < nearestDist) { nearestDist = d; nearest = e; }
+    }
+
+    if (nearest) {
+      const dx = nearest.wx - this.wx, dy = nearest.wy - this.wy;
+      this.beamAngle = Math.atan2(dy, dx);
+      this.beamEnd = this._extendRay(this.beamAngle);
+      this._hitBeam(this.wx, this.wy, this.beamEnd.x, this.beamEnd.y);
+
+      // Two extra beams ±30°
+      for (const off of [-Math.PI / 6, Math.PI / 6]) {
+        const a = this.beamAngle + off;
+        const end = this._extendRay(a);
+        this._beamAngles.push({ angle: a, end });
+        this._hitBeam(this.wx, this.wy, end.x, end.y);
+      }
+    }
+
+    // Boomerang burst every 15 frames
+    this.boomTimer++;
+    if (this.boomTimer >= 15) {
+      this.boomTimer = 0;
+      const count = 6;
+      for (let i = 0; i < count; i++) {
+        const a = (Math.PI * 2 / count) * i;
+        projectiles.push(new BoomerangProjectile(this, Math.cos(a), Math.sin(a), CELL * 12, this.damage * 0.4));
+      }
+    }
+
+    // Laser pulse every 8 frames toward nearest
+    this.laserTimer++;
+    if (this.laserTimer >= 8 && nearest) {
+      this.laserTimer = 0;
+      // Hitscan: instant damage to nearest + small AOE around it
+      nearest.hp -= this.damage * 0.5;
+      spawnParticle(nearest.wx, nearest.wy, '#00ff88');
+      if (nearest.hp <= 0) { nearest.dead = true; spawnExplosion(nearest.wx, nearest.wy); credits += enemyReward(nearest); updateHUD(); }
+      // Store laser endpoint for draw
+      this._laserPulse = { x: nearest.wx, y: nearest.wy, t: 8 };
+    }
+    if (this._laserPulse) this._laserPulse.t--;
+
+    this.target = this.hasTarget ? true : null;
+  }
+
+  draw() {
+    const s = CELL * 0.44;
+    const pulse = 1 + Math.sin(this.pulseT * 2) * 0.06;
+    ctx.save();
+    ctx.translate(this.wx, this.wy);
+
+    // Outer corona
+    ctx.beginPath();
+    ctx.arc(0, 0, s * 2.2 * pulse, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255,180,0,0.08)';
+    ctx.lineWidth = CELL * 0.5;
+    ctx.stroke();
+
+    // Spinning outer ring
+    ctx.save();
+    ctx.rotate(this.pulseT * 0.7);
+    for (let i = 0; i < 8; i++) {
+      const a = (Math.PI * 2 / 8) * i;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(a) * s * 1.3, Math.sin(a) * s * 1.3);
+      ctx.lineTo(Math.cos(a) * s * 1.7, Math.sin(a) * s * 1.7);
+      ctx.strokeStyle = `hsl(${(i * 45 + this.pulseT * 30) % 360},100%,70%)`;
+      ctx.lineWidth = 2.5;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = `hsl(${(i * 45 + this.pulseT * 30) % 360},100%,70%)`;
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Body
+    ctx.beginPath();
+    ctx.arc(0, 0, s, 0, Math.PI * 2);
+    ctx.fillStyle = '#0a0010';
+    ctx.shadowBlur = 30;
+    ctx.shadowColor = '#ff88ff';
+    ctx.fill();
+    ctx.strokeStyle = '#ff88ff';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Inner star
+    ctx.save();
+    ctx.rotate(this.pulseT * 1.2);
+    ctx.strokeStyle = '#ffcc00';
+    ctx.lineWidth = 1.5;
+    for (let i = 0; i < 6; i++) {
+      const a = (Math.PI / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.cos(a) * s * 0.7, Math.sin(a) * s * 0.7);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Core dot
+    ctx.beginPath();
+    ctx.arc(0, 0, s * 0.22, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = '#ffffff';
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Barrel at beam angle
+    ctx.rotate(this.beamAngle);
+    ctx.fillStyle = this.hasTarget ? '#ffffff' : '#ff88ff';
+    ctx.shadowBlur = this.hasTarget ? 12 : 0;
+    ctx.shadowColor = '#ff88ff';
+    ctx.fillRect(0, -CELL * 0.1, s * 1.3, CELL * 0.2);
+    ctx.shadowBlur = 0;
+    ctx.restore();
+
+    // Label
+    ctx.font = `bold ${Math.round(CELL * 0.22)}px "Orbitron", monospace`;
+    ctx.fillStyle = '#ffcc00';
+    ctx.textAlign = 'center';
+    ctx.fillText('ΩCORE', this.wx, this.wy + s + 12);
+    ctx.textAlign = 'left';
+
+    // Draw primary beam
+    if (this.beamEnd) {
+      this._drawBeam(this.wx, this.wy, this.beamEnd.x, this.beamEnd.y, '#ff88ff', '#ff44ff');
+      for (const { end } of this._beamAngles) {
+        this._drawBeam(this.wx, this.wy, end.x, end.y, '#ffaa00', '#ff6600');
+      }
+    }
+    // Draw laser pulse
+    if (this._laserPulse && this._laserPulse.t > 0) {
+      const alpha = this._laserPulse.t / 8;
+      ctx.save();
+      ctx.beginPath(); ctx.moveTo(this.wx, this.wy); ctx.lineTo(this._laserPulse.x, this._laserPulse.y);
+      ctx.strokeStyle = `rgba(0,255,136,${alpha * 0.9})`; ctx.lineWidth = 3;
+      ctx.shadowBlur = 12; ctx.shadowColor = '#00ff88'; ctx.stroke();
+      ctx.shadowBlur = 0; ctx.restore();
+    }
+  }
+
+  _drawBeam(x1, y1, x2, y2, mid, core) {
+    ctx.save();
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+    ctx.strokeStyle = mid.replace(')', ',0.12)').replace('rgb', 'rgba');
+    ctx.lineWidth = CELL * 1.0; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+    ctx.strokeStyle = mid; ctx.lineWidth = 5;
+    ctx.shadowBlur = 18; ctx.shadowColor = mid; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5;
+    ctx.shadowBlur = 6; ctx.shadowColor = '#ffffff'; ctx.stroke();
+    ctx.shadowBlur = 0; ctx.restore();
+  }
+}
+
 // Upgrade config for merged towers (shared by click-to-upgrade and hover UI)
 function _mergedUpgradeInfo(t) {
   if (t instanceof FlameCannon)    return { costs:[1200,1800,2600,3600],  base:2500, mult:1.3, color:'#ff8800' };
   if (t instanceof StormCaller)    return { costs:[3000,4500,6500,9000],  base:800,  mult:1.3, color:'#33ccff' };
   if (t instanceof GatlingSawmill) return { costs:[1000,1600,2400,3400],  base:300,  mult:1.3, color:'#ffcc00' };
   if (t instanceof ExtremeTurret)  return { costs:[3500,5500,8000,12000], base:1200, mult:1.3, color:'#ffd700' };
+  if (t instanceof OmegaCore)      return { costs:[5000,8000,12000,18000],base:25000, mult:1.5, color:'#ff88ff' };
   return null;
 }
 
@@ -7225,6 +7617,8 @@ const CRAFT_TOWER_DEFS = [
   { id: 'energylauncher',label: 'ENERGY',   cls: EnergyLauncher },
   { id: 'spinlaser',     label: 'SPINLASER',cls: SpinningLaserRod },
   { id: 'sawblade',      label: 'SAW',      cls: Sawblade },
+  { id: 'laser',         label: 'LASERROD', cls: 'laserrod' },
+  { id: 'plasma',        label: 'PLASMA',   cls: PlasmaTurret },
 ];
 
 // Recipes: pattern is 9-element array (null = must be empty)
@@ -7240,15 +7634,15 @@ const CRAFT_RECIPES = [
   {
     pattern: ['boomerang', 'sawblade', null, null, null, null, null, null, null],
     result: {
-      id: 'doubleboomerang', label: 'DOUBLE BOOMERANG', cost: 3000,
+      id: 'tripleboomerang', label: 'TRIPLE BOOMERANG', cost: 200,
       needs: ['boomerang', 'sawblade'],
-      create: (gx, gy) => new DoubleBoomerang(gx, gy)
+      create: (gx, gy) => new TripleBoomerang(gx, gy)
     }
   },
   {
     pattern: ['flamethrower', 'cannon'],
     result: {
-      id: 'flamecannon', label: 'FLAME CANNON', cost: 2000,
+      id: 'flamecannon', label: 'FLAME CANNON', cost: 200,
       needs: ['flamethrower', 'cannon'],
       create: (gx, gy) => new FlameCannon(gx, gy)
     }
@@ -7264,7 +7658,7 @@ const CRAFT_RECIPES = [
   {
     pattern: ['minigun', 'sawblade'],
     result: {
-      id: 'gatlingsawmill', label: 'GATLING SAWMILL', cost: 3500,
+      id: 'gatlingsawmill', label: 'GATLING SAWMILL', cost: 500,
       needs: ['minigun', 'sawblade'],
       create: (gx, gy) => new GatlingSawmill(gx, gy)
     }
@@ -7272,9 +7666,17 @@ const CRAFT_RECIPES = [
   {
     pattern: ['crossbow', 'minigun', 'omni'],
     result: {
-      id: 'extremeturret', label: 'EXTREME TURRET', cost: 12000,
+      id: 'extremeturret', label: 'EXTREME TURRET', cost: 1000,
       needs: ['crossbow', 'minigun', 'omni'],
       create: (gx, gy) => new ExtremeTurret(gx, gy)
+    }
+  },
+  {
+    pattern: ['turret','cannon','flamethrower','laser','spinlaser','sawblade','minigun','crossbow','laserturret','boomerang','missile','plasma','omni','tazor','energylauncher'],
+    result: {
+      id: 'omegacore', label: 'OMEGA CORE', cost: 50000,
+      needs: ['turret','cannon','flamethrower','laser','spinlaser','sawblade','minigun','crossbow','laserturret','boomerang','missile','plasma','omni','tazor','energylauncher'],
+      create: (gx, gy) => new OmegaCore(gx, gy)
     }
   }
 ];
@@ -7286,6 +7688,7 @@ function _towerDefById(id) { return CRAFT_TOWER_DEFS.find(d => d.id === id); }
 function _towerExistsOnBoard(id) {
   const def = _towerDefById(id);
   if (!def) return false;
+  if (def.cls === 'laserrod') return laserRods.length > 0;
   if (def.cls === null) return towers.some(t => t.constructor === Tower);
   return towers.some(t => t instanceof def.cls);
 }
@@ -7343,7 +7746,7 @@ function _drawRocketLauncherIcon(ic) {
   c.shadowBlur=0; c.restore();
 }
 
-function _drawDoubleBoomerangIcon(ic) {
+function _drawTripleBoomerangIcon(ic) {
   const c = ic.getContext('2d');
   const W = ic.width, H = ic.height;
   c.clearRect(0,0,W,H);
@@ -7369,7 +7772,7 @@ function _drawDoubleBoomerangIcon(ic) {
 // Draw a recipe's result icon
 function _drawResultIcon(ic, recipe) {
   if (recipe.result.id === 'rocketlauncher') _drawRocketLauncherIcon(ic);
-  else if (recipe.result.id === 'doubleboomerang') _drawDoubleBoomerangIcon(ic);
+  else if (recipe.result.id === 'tripleboomerang') _drawTripleBoomerangIcon(ic);
   else _drawIconForTool(ic, recipe.result.id);
 }
 
@@ -7382,34 +7785,45 @@ function _buildBlueprints() {
     card.className = 'craft-bp';
     card.dataset.recipeIndex = idx;
 
-    const row = document.createElement('div');
-    row.className = 'craft-recipe-row';
     const ingredients = recipe.pattern.filter(p => p !== null);
-    ingredients.forEach((typeId, k) => {
-      const slot = document.createElement('div');
-      slot.className = 'craft-slot';
-      const ic = document.createElement('canvas');
-      ic.width = 40; ic.height = 40;
-      _drawIconForTool(ic, typeId);
-      slot.appendChild(ic);
-      row.appendChild(slot);
-      if (k < ingredients.length - 1) {
-        const plus = document.createElement('span');
-        plus.className = 'craft-plus'; plus.textContent = '+';
-        row.appendChild(plus);
+    const chunkSize = 5;
+    const chunks = [];
+    for (let i = 0; i < ingredients.length; i += chunkSize) chunks.push(ingredients.slice(i, i + chunkSize));
+
+    chunks.forEach((chunk, ci) => {
+      const row = document.createElement('div');
+      row.className = 'craft-recipe-row';
+      const globalOffset = ci * chunkSize;
+      chunk.forEach((typeId, k) => {
+        const slot = document.createElement('div');
+        slot.className = 'craft-slot';
+        slot.dataset.ingredientIndex = globalOffset + k;
+        const ic = document.createElement('canvas');
+        ic.width = 40; ic.height = 40;
+        _drawIconForTool(ic, typeId);
+        slot.appendChild(ic);
+        row.appendChild(slot);
+        if (k < chunk.length - 1) {
+          const plus = document.createElement('span');
+          plus.className = 'craft-plus'; plus.textContent = '+';
+          row.appendChild(plus);
+        }
+      });
+      // Append = and result slot after the last row
+      if (ci === chunks.length - 1) {
+        const eq = document.createElement('span');
+        eq.className = 'craft-eq'; eq.textContent = '=';
+        row.appendChild(eq);
+        const rslot = document.createElement('div');
+        rslot.className = 'craft-result-slot';
+        const ric = document.createElement('canvas');
+        ric.width = 44; ric.height = 44;
+        _drawResultIcon(ric, recipe);
+        rslot.appendChild(ric);
+        row.appendChild(rslot);
       }
+      card.appendChild(row);
     });
-    const eq = document.createElement('span');
-    eq.className = 'craft-eq'; eq.textContent = '=';
-    row.appendChild(eq);
-    const rslot = document.createElement('div');
-    rslot.className = 'craft-result-slot';
-    const ric = document.createElement('canvas');
-    ric.width = 44; ric.height = 44;
-    _drawResultIcon(ric, recipe);
-    rslot.appendChild(ric);
-    row.appendChild(rslot);
-    card.appendChild(row);
 
     const label = document.createElement('div');
     label.className = 'craft-bp-label';
@@ -7799,6 +8213,19 @@ function drawShopIcons() {
         c.shadowBlur=8; c.shadowColor='#ff2244';
         c.stroke();
       });
+      c.shadowBlur=0;
+    }
+    else if (tool === 'lol') {
+      c.shadowBlur=14; c.shadowColor='#ffcc00';
+      c.strokeStyle='#ffcc00'; c.lineWidth=2.5;
+      c.beginPath(); c.arc(cx,cy,13,0,Math.PI*2);
+      c.fillStyle='#120800'; c.fill(); c.stroke();
+      c.shadowBlur=0;
+      c.fillStyle='#ffcc00';
+      c.font='bold 10px "Orbitron",monospace';
+      c.textAlign='center'; c.textBaseline='middle';
+      c.shadowBlur=8; c.shadowColor='#ffcc00';
+      c.fillText('LOL',cx,cy);
       c.shadowBlur=0;
     }
   });

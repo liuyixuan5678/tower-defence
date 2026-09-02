@@ -25,7 +25,7 @@ Choose before starting a new game (settings are in a scrollable box):
 | **Map** | Normal (single winding road) or Fork (two branching lanes) |
 | **Disasters** | Toggle the DISASTER panel of one-time abilities on/off |
 | **Tower Merging** | Toggle the MERGE panel that combines towers into merged towers on/off |
-| **OP Weapons** | Unlocks the LOL turret — 1,000,000 dmg bullet every 5 seconds |
+| **OP Weapons** | Unlocks 5 overpowered towers: LOL, Spiral, God Ray, Singularity, Zeus |
 | **LOAD SAVE** | Resume a previously saved game from a `.json` file |
 
 ## Maps
@@ -69,7 +69,11 @@ Choose before starting a new game (settings are in a scrollable box):
 | Super Turret | 2000cr | Fires bullets across the entire board |
 | Tazor | 5000cr | Continuous 500 dmg/frame electric arcs to all enemies in range; bypasses all immunities |
 | Energy Launcher | 6000cr | Fires a continuous beam to the board edge toward nearest enemy; 1000 dmg/frame, bypasses all immunities |
-| LOL *(OP Weapons)* | 100000cr | Fires one massive bullet every 5 seconds for 1,000,000 damage |
+| LOL *(OP Weapons)* | 100,000cr | Fires one massive bullet every 5 seconds for 1,000,000,000 damage |
+| Spiral *(OP Weapons)* | 250,000cr | Two curving beams lock onto the 2 nearest enemies — 10,000,000 dmg/frame each |
+| God Ray *(OP Weapons)* | 500,000cr | Spinning rainbow beam sweeps 360° continuously — 10,000,000,000 dmg/frame to anything in its path |
+| Singularity *(OP Weapons)* | 750,000cr | Black hole: 50,000,000 dmg/frame AOE within 10 cells, pulls all enemies toward it |
+| Zeus *(OP Weapons)* | 300,000cr | Strikes every enemy on the entire board simultaneously for 1,000,000,000 damage every 3 seconds |
 
 All towers can be upgraded up to **level 5** by clicking on a placed tower. Right-click to delete and receive a partial refund.
 

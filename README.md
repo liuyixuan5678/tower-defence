@@ -114,7 +114,7 @@ Enabled via the **Tower Merging** toggle on the cover screen. Open the **MERGE**
 
 1. Have the required component towers placed on the board (their slots glow **green** when present, **red** when missing).
 2. Click a blueprint to select it.
-3. Press the **SELECT** button at the top of the panel (enabled only when you own the components and can afford the cost).
+3. Press the **PLACE TOWER** button at the top of the panel (enabled only when you own the components and can afford the cost).
 4. Click any empty cell to place the merged tower — the component towers are consumed.
 
 | Merged Tower | Recipe | Cost | Description |
